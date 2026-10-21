@@ -201,16 +201,27 @@
     };
 
     return {
+      reset() {
+        // Server javobni qaytadan boshladi — yarim matnni tozalaymiz
+        text = "";
+        bubble.innerHTML = `<div class="thinking"><span class="thinking-dot"></span><span class="shimmer">${t("thinking")}</span></div>`;
+      },
       append(delta) {
         text += delta;
         if (!rafPending) { rafPending = true; requestAnimationFrame(render); }
       },
       finish(sources, errorText) {
         finished = true;
+        const partial = errorText && text;
         if (errorText && !text) text = errorText;
         bubble.innerHTML = renderMarkdown(text);
         bubble.classList.remove("streaming-cursor");
-        if (errorText) bubble.classList.add("text-red-600", "dark:text-red-400");
+        if (partial) {
+          // Javobning bir qismi kelgan bo'lsa, matn oddiy ko'rinishda qoladi, ostida qisqa ogohlantirish
+          bubble.insertAdjacentHTML("beforeend", `<p class="mt-3 text-sm text-red-600 dark:text-red-400">${escapeHtml(errorText)}</p>`);
+        } else if (errorText) {
+          bubble.classList.add("text-red-600", "dark:text-red-400");
+        }
         renderSources(sourcesEl, sources);
         actions.classList.remove("hidden");
         actions.classList.add("flex");
@@ -294,6 +305,7 @@
           if (!data) continue;
           const payload = JSON.parse(data);
           if (event === "delta") bot.append(payload.text);
+          else if (event === "reset") bot.reset();
           else if (event === "done") sources = payload.sources || [];
           else if (event === "error") errorText = payload.message;
         }

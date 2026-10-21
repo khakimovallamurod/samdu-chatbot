@@ -246,6 +246,44 @@ def _remember(p: Prepared, answer: str):
         _answer_cache.set(p.cache_key, {"answer": answer, "sources": p.sources})
 
 
+def _stream_text(p: Prepared) -> Iterator[str]:
+    client = get_client()
+    try:
+        stream = client.models.generate_content_stream(model=CHAT_MODEL, contents=p.contents, config=_gen_config(p.numeric))
+        first = next(stream, None)  # konfiguratsiya xatosi shu yerda chiqadi
+    except Exception as e:
+        if not (p.numeric and _is_config_error(e)):
+            raise
+        stream = client.models.generate_content_stream(
+            model=CHAT_MODEL, contents=p.contents, config=_gen_config(p.numeric, CHAT_THINKING_LEVEL))
+        first = next(stream, None)
+    if first is not None and first.text:
+        yield first.text
+    for chunk in stream:
+        if chunk.text:
+            yield chunk.text
+
+
+def _generate_text(p: Prepared) -> str:
+    """To'liq javob; vaqtinchalik ulanish xatosida bir marta qayta urinadi."""
+    client = get_client()
+    for attempt in range(2):
+        try:
+            try:
+                resp = client.models.generate_content(model=CHAT_MODEL, contents=p.contents, config=_gen_config(p.numeric))
+            except Exception as e:
+                if not (p.numeric and _is_config_error(e)):
+                    raise
+                resp = client.models.generate_content(
+                    model=CHAT_MODEL, contents=p.contents, config=_gen_config(p.numeric, CHAT_THINKING_LEVEL))
+            return (resp.text or "").strip()
+        except Exception as e:
+            if attempt == 1 or _is_config_error(e):
+                raise
+            log.warning("Generatsiya xatosi (%s: %s) — qayta urinilmoqda", type(e).__name__, e)
+    return ""
+
+
 # --- Ommaviy funksiyalar ---------------------------------------------------
 
 def answer(question: str, history=None, lang: str | None = None) -> dict:
@@ -257,15 +295,7 @@ def answer(question: str, history=None, lang: str | None = None) -> dict:
     else:
         _acquire_slot()
         try:
-            try:
-                resp = get_client().models.generate_content(
-                    model=CHAT_MODEL, contents=p.contents, config=_gen_config(p.numeric))
-            except Exception as e:
-                if not (p.numeric and _is_config_error(e)):
-                    raise
-                resp = get_client().models.generate_content(
-                    model=CHAT_MODEL, contents=p.contents, config=_gen_config(p.numeric, CHAT_THINKING_LEVEL))
-            text = (resp.text or "").strip()
+            text = _generate_text(p)
         except Exception as e:
             log.exception("Generatsiya xatosi: %s", e)
             raise ChatError("generation_failed", MESSAGES["error"][p.lang], 502)
@@ -300,27 +330,24 @@ def answer_stream(question: str, history=None, lang: str | None = None) -> Itera
             _acquire_slot()
             parts = []
             try:
-                try:
-                    stream = get_client().models.generate_content_stream(
-                        model=CHAT_MODEL, contents=p.contents, config=_gen_config(p.numeric))
-                    first = next(stream, None)  # konfiguratsiya xatosi shu yerda chiqadi
-                except Exception as e:
-                    if not (p.numeric and _is_config_error(e)):
-                        raise
-                    stream = get_client().models.generate_content_stream(
-                        model=CHAT_MODEL, contents=p.contents, config=_gen_config(p.numeric, CHAT_THINKING_LEVEL))
-                    first = next(stream, None)
-                if first is not None and first.text:
-                    parts.append(first.text)
-                    yield {"type": "delta", "text": first.text}
-                for chunk in stream:
-                    if chunk.text:
-                        parts.append(chunk.text)
-                        yield {"type": "delta", "text": chunk.text}
-            except Exception as e:
-                log.exception("Oqimli generatsiya xatosi: %s", e)
-                yield {"type": "error", "code": "generation_failed", "message": MESSAGES["error"][p.lang]}
-                return
+                # Ulanish oqim o'rtasida uzilsa (masalan, uzoq bo'sh turgan ulanish yopilgan bo'lsa),
+                # javob avtomatik bir marta qaytadan yaratiladi; mijozga "reset" signali yuboriladi.
+                for attempt in range(2):
+                    parts = []
+                    try:
+                        for text in _stream_text(p):
+                            parts.append(text)
+                            yield {"type": "delta", "text": text}
+                        break
+                    except Exception as e:
+                        if attempt == 0:
+                            log.warning("Oqim uzildi (%s: %s) — qayta urinilmoqda", type(e).__name__, e)
+                            if parts:
+                                yield {"type": "reset"}
+                            continue
+                        log.exception("Oqimli generatsiya xatosi: %s", e)
+                        yield {"type": "error", "code": "generation_failed", "message": MESSAGES["error"][p.lang]}
+                        return
             finally:
                 _generation_slots.release()
             full = "".join(parts).strip()
