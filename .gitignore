@@ -5,8 +5,9 @@
 chroma_db/
 *.sqlite3
 
-# Xom PDF hujjatlar (katta hajm; matnli versiyasi new-documents/ da)
+# Bilim bazasi manbalari (PDF va matnli hujjatlar)
 documents/
+new-documents/
 
 # Python
 __pycache__/
@@ -19,3 +20,4 @@ venv/
 .codex
 .vscode/
 .idea/
+new-documents/
