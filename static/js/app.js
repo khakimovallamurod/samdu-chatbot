@@ -78,12 +78,15 @@
     autoResize();
   }
 
-  // ---------- Saqlash (faqat shu brauzerda) ----------
+  // ---------- Saqlash ----------
+  // Suhbat faqat joriy tab davomida saqlanadi (sessionStorage): sahifa yangilansa qoladi,
+  // tab/brauzer yopilib qayta ochilganda yangi suhbat boshlanadi.
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {} // eski versiyadan qolgan doimiy tarixni o'chirish
   function loadHistory() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch (e) { return []; }
+    try { return JSON.parse(sessionStorage.getItem(STORAGE_KEY)) || []; } catch (e) { return []; }
   }
   function saveHistory() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(-MAX_STORED))); } catch (e) {}
+    try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(-MAX_STORED))); } catch (e) {}
   }
 
   // ---------- Yordamchilar ----------
