@@ -57,6 +57,34 @@
     preroll: 3,          // gap boshidan oldingi 300 ms ham yuboriladi (boshi kesilmasin)
   };
 
+  // Foydalanuvchiga ko'rinadigan xabarlar (UZ / EN)
+  const MSG = {
+    uz: {
+      startFailed: "Ovozli suhbatni boshlab bo'lmadi.",
+      micDenied: "Mikrofonga ruxsat berilmadi. Brauzer sozlamalarida mikrofonga ruxsat bering.",
+      micMissing: "Mikrofon topilmadi.",
+      unavailable: "Ovozli yordamchi vaqtincha mavjud emas.",
+      timeout: "Ulanish vaqti tugadi. Qayta urinib ko'ring.",
+      connectFailed: "Ovozli xizmatga ulanib bo'lmadi.",
+      ended: "Ovozli seans yakunlandi. Qayta boshlash uchun mikrofon tugmasini bosing.",
+      goAway: "Seans vaqti tugamoqda. Davom etish uchun qayta boshlang.",
+      notFound: "Ma'lumot topilmadi.",
+      toolPrefix: "Quyidagi ma'lumotlar asosida javobni FAQAT O'ZBEK TILIDA ayting:\n\n",
+    },
+    en: {
+      startFailed: "Could not start the voice chat.",
+      micDenied: "Microphone access was denied. Please allow the microphone in your browser settings.",
+      micMissing: "No microphone found.",
+      unavailable: "The voice assistant is temporarily unavailable.",
+      timeout: "Connection timed out. Please try again.",
+      connectFailed: "Could not connect to the voice service.",
+      ended: "The voice session has ended. Press the microphone button to start again.",
+      goAway: "The session is about to end. Please start again to continue.",
+      notFound: "No information found.",
+      toolPrefix: "Answer ONLY IN ENGLISH, translating accurately from the information below:\n\n",
+    },
+  };
+
   function base64FromBuffer(buffer) {
     const bytes = new Uint8Array(buffer);
     let binary = "";
@@ -76,6 +104,7 @@
   class LiveVoice {
     constructor(handlers = {}) {
       this.h = handlers; // onState, onLevel, onTranscript, onTurn, onError, onClose
+      this.lang = "uz";
       this.ws = null;
       this.muted = false;
       this.active = false;
@@ -120,6 +149,10 @@
       }
     }
 
+    msg(key) {
+      return (MSG[this.lang] || MSG.uz)[key];
+    }
+
     emit(name, ...args) {
       if (typeof this.h[name] === "function") this.h[name](...args);
     }
@@ -159,11 +192,11 @@
         this.setState("listening");
         this.levelLoop();
       } catch (err) {
-        let msg = err && err.message ? err.message : "Ovozli suhbatni boshlab bo'lmadi.";
+        let msg = err && err.message ? err.message : this.msg("startFailed");
         if (err && (err.name === "NotAllowedError" || err.name === "SecurityError")) {
-          msg = "Mikrofonga ruxsat berilmadi. Brauzer sozlamalarida mikrofonga ruxsat bering.";
+          msg = this.msg("micDenied");
         } else if (err && err.name === "NotFoundError") {
-          msg = "Mikrofon topilmadi.";
+          msg = this.msg("micMissing");
         }
         this.emit("onError", msg);
         this.stop();
@@ -171,9 +204,13 @@
     }
 
     async fetchToken() {
-      const res = await fetch("/api/v1/live/token", { method: "POST" });
+      const res = await fetch("/api/v1/live/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lang: this.lang }),
+      });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.message || "Ovozli yordamchi vaqtincha mavjud emas.");
+      if (!res.ok) throw new Error(data.message || this.msg("unavailable"));
       return data;
     }
 
@@ -183,7 +220,7 @@
         ws.binaryType = "arraybuffer";
         this.ws = ws;
         let ready = false;
-        const timer = setTimeout(() => { if (!ready) reject(new Error("Ulanish vaqti tugadi. Qayta urinib ko'ring.")); }, 12000);
+        const timer = setTimeout(() => { if (!ready) reject(new Error(this.msg("timeout"))); }, 12000);
 
         ws.onopen = () => ws.send(JSON.stringify(tokenData.setup));
         ws.onmessage = (ev) => {
@@ -198,12 +235,12 @@
           }
           this.handleMessage(msg);
         };
-        ws.onerror = () => { if (!ready) { clearTimeout(timer); reject(new Error("Ovozli xizmatga ulanib bo'lmadi.")); } };
+        ws.onerror = () => { if (!ready) { clearTimeout(timer); reject(new Error(this.msg("connectFailed"))); } };
         ws.onclose = (ev) => {
           clearTimeout(timer);
-          if (!ready) { reject(new Error("Ovozli xizmatga ulanib bo'lmadi.")); return; }
+          if (!ready) { reject(new Error(this.msg("connectFailed"))); return; }
           if (this.active) {
-            if (ev.code !== 1000) this.emit("onError", "Ovozli seans yakunlandi. Qayta boshlash uchun mikrofon tugmasini bosing.");
+            if (ev.code !== 1000) this.emit("onError", this.msg("ended"));
             this.stop();
           }
         };
@@ -228,7 +265,7 @@
 
     handleMessage(msg) {
       if (msg.toolCall) { this.handleToolCall(msg.toolCall); return; }
-      if (msg.goAway) { this.emit("onError", "Seans vaqti tugamoqda. Davom etish uchun qayta boshlang."); return; }
+      if (msg.goAway) { this.emit("onError", this.msg("goAway")); return; }
       const sc = msg.serverContent;
       if (!sc) return;
 
@@ -272,7 +309,7 @@
       this.setState("searching");
       const calls = toolCall.functionCalls || [];
       const responses = await Promise.all(calls.map(async (fc) => {
-        let result = "Ma'lumot topilmadi.";
+        let result = this.msg("notFound");
         if (fc.name === "search_samdu") {
           try {
             const res = await fetch("/api/v1/search", {
@@ -282,7 +319,7 @@
             });
             const data = await res.json();
             // Bazada ruscha matnlar ham bor — model javobni baribir o'zbekcha berishi uchun eslatma
-            if (res.ok && data.found) result = "Quyidagi ma'lumotlar asosida javobni FAQAT O'ZBEK TILIDA ayting:\n\n" + data.context;
+            if (res.ok && data.found) result = this.msg("toolPrefix") + data.context;
           } catch (e) { /* bo'sh natija qaytariladi */ }
         }
         return { id: fc.id, name: fc.name, response: { result } };

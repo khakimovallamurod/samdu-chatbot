@@ -1,6 +1,6 @@
 # --- Asosiy (server ishlashi uchun majburiy) ---
 Flask>=3.1,<4                # veb server va REST API
-google-genai>=2.18,<3        # matnli javob, embedding, ovozli seans tokeni
+google-genai       
 chromadb>=1.5,<2             # vektor baza (bilim bazasi)
 python-dotenv>=1.0           # .env dan API kalitni o'qish
 

@@ -20,6 +20,7 @@ from config import (
     ANSWER_CACHE_TTL,
     CHAT_MODEL,
     CHAT_THINKING_LEVEL,
+    CHAT_THINKING_LEVEL_NUMERIC,
     GEN_MAX_OUTPUT_TOKENS,
     GEN_TEMPERATURE,
     GENERATION_QUEUE_TIMEOUT,
@@ -28,7 +29,7 @@ from config import (
     MAX_QUESTION_CHARS,
 )
 from knowledge import KnowledgeBase, get_kb
-from prompts import SYSTEM_PROMPT
+from prompts import ANSWER_LANGUAGE, LAB_NAME_EN, LAB_NAME_UZ, SYSTEM_PROMPT
 from utils import TTLCache, get_client, normalize_query
 
 log = logging.getLogger(__name__)
@@ -45,14 +46,42 @@ class ChatError(Exception):
 
 # --- Til va tezkor javoblar ------------------------------------------------
 
-def detect_lang(text: str) -> str:
+_EN_WORDS = set("""
+what who whom whose where when why how which is are was were be been do does did can could should would will
+the a an of to in on at for from with about and or not my your our their his her its this that these those there
+please tell me give show explain list hello hi hey thanks thank you university faculty faculties rector student
+students admission apply requirements documents fee fees tuition dormitory scholarship grade grading exam score
+""".split())
+_UZ_MARKERS = re.compile(
+    r"(o'|g'|o‘|g‘|ʻ|\b(va|bilan|uchun|haqida|qanday|qaysi|nima|kim|qachon|qayerda|nechta|qancha|bormi|kerak"
+    r"|ber|bering|ayt|ayting|menga|iltimos|salom|rahmat|universitet|talaba|talabalar|rektor|qabul)\b"
+    r"|\w+(ning|lar|lari|larni|dagi|ga|da|dan|ni|mi|chi)\b)", re.I)
+
+
+def detect_lang(text: str, hint: str | None = None) -> str:
+    """Savol tilini aniqlaydi. Aniq bo'lmasa, UI da tanlangan til (hint) ishlatiladi."""
     if re.search(r"[ўқғҳЎҚҒҲ]", text):
         return "uz_cyrl"
     if re.search(r"[а-яА-ЯёЁ]", text):
         return "ru"
-    if re.search(r"\b(what|who|where|when|how|is|are|the|university|hello|thanks)\b", text, re.I):
+    words = re.findall(r"[a-zA-Z']+", text.lower())
+    en_score = sum(1 for w in words if w in _EN_WORDS)
+    uz_score = len(_UZ_MARKERS.findall(text))
+    if en_score > uz_score:
         return "en"
-    return "uz"
+    if uz_score > en_score:
+        return "uz"
+    return "en" if hint == "en" else "uz"
+
+
+# Formula, hisob-kitob va raqamli qiymatlar haqidagi savollar — model chuqurroq "o'ylaydi"
+_NUMERIC_RE = re.compile(
+    r"\d|formula|hisobla|hisoblan|gpa|ball|foiz|kredit|baho|shkala|necha|qancha|miqdor|to'lov|kontrakt"
+    r"|calculat|compute|score|percent|credit|grade|how\s+much|how\s+many|fee|tuition", re.I)
+
+
+def is_numeric_question(text: str) -> bool:
+    return bool(_NUMERIC_RE.search(text))
 
 
 MESSAGES = {
@@ -75,10 +104,10 @@ MESSAGES = {
         "en": "Goodbye! Come back any time.",
     },
     "identity": {
-        "uz": "Men Sharof Rashidov nomidagi Samarqand davlat universitetining axborot yordamchisiman. Meni SamDU Sun'iy intellekt laboratoriyasi ishlab chiqqan. SamDU haqidagi savollaringizga javob beraman.",
-        "uz_cyrl": "Мен Шароф Рашидов номидаги Самарқанд давлат университетининг ахборот ёрдамчисиман. Мени СамДУ Сунъий интеллект лабораторияси ишлаб чиққан.",
-        "ru": "Я информационный помощник Самаркандского государственного университета имени Шарофа Рашидова, разработанный Лабораторией искусственного интеллекта СамГУ.",
-        "en": "I'm the information assistant of Sharof Rashidov Samarkand State University, developed by the SamSU Artificial Intelligence Laboratory.",
+        "uz": f"Men Sharof Rashidov nomidagi Samarqand davlat universitetining AI yordamchisiman. Meni {LAB_NAME_UZ} ishlab chiqqan. SamDU haqidagi savollaringizga javob beraman.",
+        "uz_cyrl": "Мен Шароф Рашидов номидаги Самарқанд давлат университетининг AI ёрдамчисиман. Мени СамДУ Сунъий интеллект ва рақамли технологиялар лабораторияси ишлаб чиққан.",
+        "ru": "Я AI-помощник Самаркандского государственного университета имени Шарофа Рашидова, разработанный Лабораторией искусственного интеллекта и цифровых технологий СамГУ.",
+        "en": f"I'm the AI assistant of Sharof Rashidov Samarkand State University, developed by the {LAB_NAME_EN}. Ask me anything about the university.",
     },
     "not_found": {
         "uz": "Kechirasiz, bu savol bo'yicha menda aniq ma'lumot yo'q. Men faqat SamDU bilan bog'liq savollarga javob beraman. Batafsil ma'lumot uchun www.samdu.uz saytiga yoki +998 66 240 38 40 ishonch telefoniga murojaat qiling.",
@@ -104,17 +133,18 @@ _SMALL_TALK = [
     ("identity", re.compile(
         r"(sen|siz)\s+kim(san|siz)|seni\s+kim|sizni\s+kim|kim\s+(yaratgan|yaratdi|ishlab\s+chiqqan)|qaysi\s+model"
         r"|\b(gemini|chatgpt|gpt|openai|google|api\s*key|api)\b|кто\s+ты|кто\s+вас|какая\s+модель|who\s+are\s+you"
-        r"|who\s+(made|created|built)\s+you|what\s+model", re.I)),
+        r"|who\s+(made|created|built|developed)\s+you|(what|which)\s+(model|technology|ai|llm)"
+        r"|qanday\s+(texnologiya|model|sun'iy\s+intellekt)|nima\s+asosida\s+ishlaysan|\b(claude|llm|llama|deepseek)\b", re.I)),
 ]
 
 
-def small_talk_reply(text: str) -> str | None:
+def small_talk_reply(text: str, hint: str | None = None) -> str | None:
     clean = re.sub(r"[‘’ʼʻ`]", "'", text.strip())
     if len(clean) > 80:
         return None
     for kind, pattern in _SMALL_TALK:
         if pattern.search(clean):
-            return MESSAGES[kind][detect_lang(clean)]
+            return MESSAGES[kind][detect_lang(clean, hint)]
     return None
 
 
@@ -129,6 +159,7 @@ class Prepared:
     contents: list = field(default_factory=list)
     cache_key: str | None = None
     cached: bool = False
+    numeric: bool = False
 
 
 def _clean_history(history) -> list[dict]:
@@ -145,20 +176,21 @@ def _clean_history(history) -> list[dict]:
     return out
 
 
-def prepare(question: str, history=None) -> Prepared:
+def prepare(question: str, history=None, lang: str | None = None) -> Prepared:
     q = (question or "").strip()
     if not q:
         raise ChatError("empty_question", "Savol bo'sh bo'lmasligi kerak.", 400)
     if len(q) > MAX_QUESTION_CHARS:
         raise ChatError("question_too_long", f"Savol {MAX_QUESTION_CHARS} belgidan oshmasligi kerak.", 400)
 
-    lang = detect_lang(q)
-    quick = small_talk_reply(q)
+    hint = lang if lang in ("uz", "en") else None
+    lang = detect_lang(q, hint)
+    quick = small_talk_reply(q, hint)
     if quick:
         return Prepared(question=q, lang=lang, instant_answer=quick)
 
     hist = _clean_history(history)
-    cache_key = None if hist else normalize_query(q)
+    cache_key = None if hist else f"{lang}:{normalize_query(q)}"
     if cache_key:
         hit = _answer_cache.get(cache_key)
         if hit:
@@ -176,20 +208,32 @@ def prepare(question: str, history=None) -> Prepared:
         return Prepared(question=q, lang=lang, instant_answer=MESSAGES["not_found"][lang])
 
     contents = [types.Content(role=h["role"], parts=[types.Part(text=h["content"])]) for h in hist]
+    numeric = is_numeric_question(q)
     contents.append(types.Content(role="user", parts=[types.Part(text=(
         f"MA'LUMOTLAR:\n{KnowledgeBase.build_context(chunks)}\n\n"
-        f"SAVOL: {q}"
+        f"JAVOB TILI: {ANSWER_LANGUAGE[lang]}\n"
+        + ("ESLATMA: savol formula/raqamli qiymatlarga oid — formulani aynan keltiring, belgilarni izohlang, "
+           "raqamlar berilgan bo'lsa bosqichma-bosqich hisoblab aniq natija bering.\n" if numeric else "")
+        + f"SAVOL: {q}"
     ))]))
-    return Prepared(question=q, lang=lang, sources=KnowledgeBase.sources(chunks), contents=contents, cache_key=cache_key)
+    return Prepared(question=q, lang=lang, sources=KnowledgeBase.sources(chunks), contents=contents,
+                    cache_key=cache_key, numeric=numeric)
 
 
-def _gen_config() -> types.GenerateContentConfig:
+def _gen_config(numeric: bool = False, level: str | None = None) -> types.GenerateContentConfig:
     return types.GenerateContentConfig(
         system_instruction=SYSTEM_PROMPT,
-        temperature=GEN_TEMPERATURE,
+        temperature=0.1 if numeric else GEN_TEMPERATURE,
         max_output_tokens=GEN_MAX_OUTPUT_TOKENS,
-        thinking_config=types.ThinkingConfig(thinking_level=CHAT_THINKING_LEVEL),
+        thinking_config=types.ThinkingConfig(
+            thinking_level=level or (CHAT_THINKING_LEVEL_NUMERIC if numeric else CHAT_THINKING_LEVEL)),
     )
+
+
+def _is_config_error(e: Exception) -> bool:
+    """Model tanlangan thinking darajasini qo'llab-quvvatlamasa — standart daraja bilan qayta urinamiz."""
+    msg = str(e).lower()
+    return "thinking" in msg or "invalid_argument" in msg
 
 
 def _acquire_slot():
@@ -204,16 +248,23 @@ def _remember(p: Prepared, answer: str):
 
 # --- Ommaviy funksiyalar ---------------------------------------------------
 
-def answer(question: str, history=None) -> dict:
+def answer(question: str, history=None, lang: str | None = None) -> dict:
     """To'liq javobni bir martada qaytaradi."""
     started = time.perf_counter()
-    p = prepare(question, history)
+    p = prepare(question, history, lang)
     if p.instant_answer is not None:
         text = p.instant_answer
     else:
         _acquire_slot()
         try:
-            resp = get_client().models.generate_content(model=CHAT_MODEL, contents=p.contents, config=_gen_config())
+            try:
+                resp = get_client().models.generate_content(
+                    model=CHAT_MODEL, contents=p.contents, config=_gen_config(p.numeric))
+            except Exception as e:
+                if not (p.numeric and _is_config_error(e)):
+                    raise
+                resp = get_client().models.generate_content(
+                    model=CHAT_MODEL, contents=p.contents, config=_gen_config(p.numeric, CHAT_THINKING_LEVEL))
             text = (resp.text or "").strip()
         except Exception as e:
             log.exception("Generatsiya xatosi: %s", e)
@@ -228,18 +279,19 @@ def answer(question: str, history=None) -> dict:
         "answer": text,
         "sources": p.sources,
         "cached": p.cached,
+        "lang": p.lang,
         "latency_ms": int((time.perf_counter() - started) * 1000),
     }
 
 
-def answer_stream(question: str, history=None) -> Iterator[dict]:
+def answer_stream(question: str, history=None, lang: str | None = None) -> Iterator[dict]:
     """Javobni bo'laklab qaytaradi: {"type": "delta", "text"} ... {"type": "done", ...}.
 
     Validatsiya xatolari (ChatError) birinchi next() chaqiruvidan oldin ko'tariladi,
     shuning uchun API ularni oqim boshlanmasdan to'g'ri HTTP status bilan qaytara oladi.
     """
     started = time.perf_counter()
-    p = prepare(question, history)
+    p = prepare(question, history, lang)
 
     def generate():
         if p.instant_answer is not None:
@@ -248,7 +300,19 @@ def answer_stream(question: str, history=None) -> Iterator[dict]:
             _acquire_slot()
             parts = []
             try:
-                stream = get_client().models.generate_content_stream(model=CHAT_MODEL, contents=p.contents, config=_gen_config())
+                try:
+                    stream = get_client().models.generate_content_stream(
+                        model=CHAT_MODEL, contents=p.contents, config=_gen_config(p.numeric))
+                    first = next(stream, None)  # konfiguratsiya xatosi shu yerda chiqadi
+                except Exception as e:
+                    if not (p.numeric and _is_config_error(e)):
+                        raise
+                    stream = get_client().models.generate_content_stream(
+                        model=CHAT_MODEL, contents=p.contents, config=_gen_config(p.numeric, CHAT_THINKING_LEVEL))
+                    first = next(stream, None)
+                if first is not None and first.text:
+                    parts.append(first.text)
+                    yield {"type": "delta", "text": first.text}
                 for chunk in stream:
                     if chunk.text:
                         parts.append(chunk.text)
@@ -268,6 +332,7 @@ def answer_stream(question: str, history=None) -> Iterator[dict]:
             "type": "done",
             "sources": p.sources,
             "cached": p.cached,
+            "lang": p.lang,
             "latency_ms": int((time.perf_counter() - started) * 1000),
         }
 

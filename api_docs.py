@@ -94,6 +94,11 @@ OPENAPI_SPEC = {
             "post": {
                 "tags": ["Voice"],
                 "summary": "Ovozli seans uchun bir martalik token olish",
+                "requestBody": {"required": False, "content": {"application/json": {
+                    "schema": {"type": "object", "properties": {"lang": {"type": "string", "enum": ["uz", "en"], "default": "uz",
+                               "description": "Ovozli yordamchi tili"}}},
+                    "example": {"lang": "en"},
+                }}},
                 "description": (
                     "Token bitta seans uchun amal qiladi; seansni `session_start_deadline` gacha boshlash kerak "
                     "(2 daqiqa), seans esa `expires_at` gacha davom etishi mumkin (30 daqiqa). Model, ovoz va "
@@ -111,6 +116,7 @@ OPENAPI_SPEC = {
             "get": {
                 "tags": ["Service"],
                 "summary": "Tavsiya etilgan savollar (tezkor tugmalar uchun)",
+                "parameters": [{"name": "lang", "in": "query", "schema": {"type": "string", "enum": ["uz", "en"], "default": "uz"}}],
                 "responses": {"200": {"description": "Ro'yxat", "content": {"application/json": {"example": {
                     "status": "success",
                     "suggestions": [{"title": "Qabul", "question": "SamDUga qabul qilish tartibi qanday?"}],
@@ -141,6 +147,7 @@ OPENAPI_SPEC = {
                 "required": ["question"],
                 "properties": {
                     "question": {"type": "string", "maxLength": 1000, "description": "Foydalanuvchi savoli (o'zbek, rus, ingliz)"},
+                    "lang": {"type": "string", "enum": ["uz", "en"], "description": "Ilovada tanlangan til. Javob savol tilida beriladi; til aniq bo'lmasa shu til ishlatiladi."},
                     "history": {
                         "type": "array",
                         "description": "Ixtiyoriy: davomiy savollar uchun oldingi xabarlar (oxirgi 6 tasi hisobga olinadi). Server suhbatni saqlamaydi.",
@@ -159,6 +166,7 @@ OPENAPI_SPEC = {
                     "answer": {"type": "string", "description": "Markdown formatidagi javob"},
                     "sources": {"type": "array", "items": {"$ref": "#/components/schemas/Source"}},
                     "cached": {"type": "boolean"},
+                    "lang": {"type": "string", "description": "Javob tili (uz, uz_cyrl, ru, en)"},
                     "latency_ms": {"type": "integer"},
                 },
             },

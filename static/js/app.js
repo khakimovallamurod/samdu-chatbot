@@ -19,6 +19,65 @@
   let history = loadHistory();
   let busy = false;
 
+  // ---------- Til (UZ / EN) ----------
+  const I18N = {
+    uz: {
+      pageTitle: "SamDU AI Yordamchi",
+      assistant: "AI yordamchi", newChat: "Yangi suhbat", topics: "Mavzular", light: "Yorug'", dark: "Qorong'i",
+      university: "Samarqand davlat universiteti", official: "Rasmiy AI yordamchi",
+      welcomeTitle: "Qanday yordam bera olaman?",
+      welcomeText: "Qabul, fakultetlar, rahbariyat va universitet tartib-qoidalari haqida yozing yoki",
+      welcomeVoice: "ovozli so'rang",
+      placeholder: "SamDU haqida savol bering...",
+      footer: "© 2026 SamDU Sun'iy intellekt va raqamli texnologiyalar laboratoriyasi · Muhim ma'lumotlarni rasmiy manbalardan tekshiring",
+      voiceTitle: "SamDU ovozli yordamchi",
+      send: "Yuborish", voiceMode: "Ovozli rejim", voiceTag: "Ovozli", voiceReply: "Ovozli javob",
+      thinking: "Ma'lumot izlanmoqda...", copy: "Nusxa olish", copied: "Nusxa olindi",
+      error: "Kechirasiz, xatolik yuz berdi.", network: "Tarmoq xatosi. Internet aloqasini tekshiring.",
+      unsupported: "Brauzeringiz ovozli suhbatni qo'llab-quvvatlamaydi (HTTPS kerak).",
+      voiceHint: "Savolingizni ovoz chiqarib bering. Masalan: “SamDU rektori kim?”",
+      micMuted: "Mikrofon o'chirilgan", theme: "Mavzuni almashtirish", clear: "Suhbatni tozalash", mic: "Ovozli suhbat",
+      status: { connecting: "Ulanmoqda...", listening: "Tinglayapman — gapiring", searching: "Ma'lumot qidirilmoqda...", speaking: "Javob bermoqda...", idle: "" },
+    },
+    en: {
+      pageTitle: "SamSU AI Assistant",
+      assistant: "AI assistant", newChat: "New chat", topics: "Topics", light: "Light", dark: "Dark",
+      university: "Samarkand State University", official: "Official AI assistant",
+      welcomeTitle: "How can I help you?",
+      welcomeText: "Ask about admission, faculties, leadership and university regulations, or",
+      welcomeVoice: "ask by voice",
+      placeholder: "Ask anything about SamSU...",
+      footer: "© 2026 SamSU Artificial Intelligence and Digital Technologies Laboratory · Please verify important information with official sources",
+      voiceTitle: "SamSU voice assistant",
+      send: "Send", voiceMode: "Voice mode", voiceTag: "Voice", voiceReply: "Voice reply",
+      thinking: "Looking up information...", copy: "Copy", copied: "Copied",
+      error: "Sorry, something went wrong.", network: "Network error. Please check your internet connection.",
+      unsupported: "Your browser does not support voice chat (HTTPS is required).",
+      voiceHint: "Ask your question out loud. For example: “Who is the rector of SamSU?”",
+      micMuted: "Microphone is muted", theme: "Toggle theme", clear: "Clear chat", mic: "Voice chat",
+      status: { connecting: "Connecting...", listening: "Listening — go ahead", searching: "Looking up information...", speaking: "Answering...", idle: "" },
+    },
+  };
+  let lang = "uz";
+  try { lang = localStorage.getItem("samdu-lang") === "en" ? "en" : "uz"; } catch (e) {}
+  const t = (key) => I18N[lang][key];
+
+  function applyLang(next) {
+    lang = next === "en" ? "en" : "uz";
+    try { localStorage.setItem("samdu-lang", lang); } catch (e) {}
+    document.documentElement.lang = lang;
+    document.title = t("pageTitle");
+    document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+    document.querySelectorAll("[data-t-uz]").forEach((el) => { el.textContent = el.dataset[lang === "en" ? "tEn" : "tUz"]; });
+    document.querySelectorAll("[data-q-uz]").forEach((el) => { el.dataset.question = el.dataset[lang === "en" ? "qEn" : "qUz"]; });
+    document.querySelectorAll(".theme-toggle").forEach((el) => { el.title = t("theme"); el.setAttribute("aria-label", t("theme")); });
+    ui.clear.title = t("clear"); ui.clear.setAttribute("aria-label", t("clear"));
+    ui.micBtn.title = t("mic"); ui.micBtn.setAttribute("aria-label", t("mic"));
+    if (window.voice) window.voice.lang = lang;
+    autoResize();
+  }
+
   // ---------- Saqlash (faqat shu brauzerda) ----------
   function loadHistory() {
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch (e) { return []; }
@@ -29,8 +88,25 @@
 
   // ---------- Yordamchilar ----------
   marked.setOptions({ breaks: true, gfm: true });
+  // Formulalar: markdown dan oldin ajratib olinadi (aks holda _ va * buziladi), keyin KaTeX bilan chiziladi
   function renderMarkdown(text) {
-    const html = DOMPurify.sanitize(marked.parse(text || ""));
+    const maths = [];
+    const stash = (tex, display) => { maths.push({ tex, display }); return `@@MATH${maths.length - 1}@@`; };
+    const src = (text || "")
+      .replace(/\$\$([\s\S]+?)\$\$/g, (_, tex) => stash(tex, true))
+      .replace(/\\\[([\s\S]+?)\\\]/g, (_, tex) => stash(tex, true))
+      .replace(/\\\(([\s\S]+?)\\\)/g, (_, tex) => stash(tex, false))
+      .replace(/(^|[^\\$\w])\$([^\s$](?:[^$\n]*?[^\s$])?)\$(?![\w$])/g,
+        (m, pre, tex) => (/[\\^_=+{}]/.test(tex) ? pre + stash(tex, false) : m));
+    let html = DOMPurify.sanitize(marked.parse(src));
+    if (maths.length) {
+      html = html.replace(/@@MATH(\d+)@@/g, (_, i) => {
+        const m = maths[Number(i)];
+        if (!window.katex) return escapeHtml(m.tex);
+        try { return katex.renderToString(m.tex, { displayMode: m.display, throwOnError: false, output: "html" }); }
+        catch (e) { return escapeHtml(m.tex); }
+      });
+    }
     const tpl = document.createElement("template");
     tpl.innerHTML = html;
     tpl.content.querySelectorAll("a").forEach((a) => { a.target = "_blank"; a.rel = "noopener noreferrer"; });
@@ -71,8 +147,8 @@
     ui.send.disabled = busy;
     ui.send.querySelector(".icon-send").classList.toggle("hidden", !hasText);
     ui.send.querySelector(".icon-voice").classList.toggle("hidden", hasText);
-    ui.send.setAttribute("aria-label", hasText ? "Yuborish" : "Ovozli rejim");
-    ui.send.title = hasText ? "Yuborish" : "Ovozli rejim";
+    ui.send.setAttribute("aria-label", hasText ? t("send") : t("voiceMode"));
+    ui.send.title = hasText ? t("send") : t("voiceMode");
   }
 
   // ---------- Xabarlarni chizish ----------
@@ -85,7 +161,7 @@
     row.className = "msg-enter flex justify-end";
     row.innerHTML = `
       <div class="max-w-[85%] rounded-3xl bg-zinc-100 px-4 py-2.5 text-[15px] leading-relaxed text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
-        ${voice ? `<span class="mb-1 flex items-center gap-1 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">${ICON_MIC_SMALL} Ovozli</span>` : ""}
+        ${voice ? `<span class="mb-1 flex items-center gap-1 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">${ICON_MIC_SMALL} ${t("voiceTag")}</span>` : ""}
         <div class="whitespace-pre-wrap break-words">${escapeHtml(text)}</div>
       </div>`;
     ui.messages.appendChild(row);
@@ -99,11 +175,11 @@
     row.innerHTML = `
       <img src="/static/images/samdulogo.png" alt="" class="mt-0.5 h-8 w-8 shrink-0 rounded-full bg-white ring-1 ring-zinc-200 dark:ring-zinc-700" />
       <div class="min-w-0 flex-1 pt-1">
-        ${voice ? `<div class="mb-1 flex items-center gap-1 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">${ICON_MIC_SMALL} Ovozli javob</div>` : ""}
-        <div class="bubble prose-chat"><div class="thinking"><span class="thinking-dot"></span><span class="shimmer">Ma'lumot izlanmoqda...</span></div></div>
+        ${voice ? `<div class="mb-1 flex items-center gap-1 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">${ICON_MIC_SMALL} ${t("voiceReply")}</div>` : ""}
+        <div class="bubble prose-chat"><div class="thinking"><span class="thinking-dot"></span><span class="shimmer">${t("thinking")}</span></div></div>
         <div class="sources mt-4 hidden flex-wrap gap-1.5"></div>
         <div class="actions mt-2 hidden items-center gap-1">
-          <button class="copy-btn inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-200">${ICON_COPY}<span>Nusxa olish</span></button>
+          <button class="copy-btn inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-200">${ICON_COPY}<span>${t("copy")}</span></button>
         </div>
       </div>`;
     ui.messages.appendChild(row);
@@ -139,7 +215,7 @@
         actions.classList.remove("hidden");
         actions.classList.add("flex");
         actions.querySelector(".copy-btn").onclick = async () => {
-          try { await navigator.clipboard.writeText(text); toast("Nusxa olindi"); } catch (e) {}
+          try { await navigator.clipboard.writeText(text); toast(t("copied")); } catch (e) {}
         };
         scrollToBottom();
         return text;
@@ -193,11 +269,11 @@
       const res = await fetch("/api/v1/chat/stream", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, history: apiHistory }),
+        body: JSON.stringify({ question, history: apiHistory, lang }),
       });
       if (!res.ok || !res.body) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.message || "Kechirasiz, xatolik yuz berdi.");
+        throw new Error(data.message || t("error"));
       }
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
@@ -223,7 +299,7 @@
         }
       }
     } catch (e) {
-      errorText = e.message || "Tarmoq xatosi. Internet aloqasini tekshiring.";
+      errorText = e.message && e.message !== "Failed to fetch" ? e.message : t("network");
     }
 
     const answer = bot.finish(sources, errorText);
@@ -247,19 +323,11 @@
   }
 
   // ---------- Ovozli suhbat ----------
-  const STATUS = {
-    connecting: "Ulanmoqda...",
-    listening: "Tinglayapman — gapiring",
-    searching: "Ma'lumot qidirilmoqda...",
-    speaking: "Javob bermoqda...",
-    idle: "",
-  };
-
   const voice = new window.LiveVoice({
     onState(state) {
       ui.voice.orb.dataset.state = state;
       ui.voice.orb.dataset.muted = voice.muted ? "true" : "false";
-      ui.voice.status.textContent = voice.muted && state === "listening" ? "Mikrofon o'chirilgan" : STATUS[state] || "";
+      ui.voice.status.textContent = voice.muted && state === "listening" ? t("micMuted") : t("status")[state] || "";
     },
     onLevel(level) { ui.voice.orb.style.setProperty("--level", level.toFixed(3)); },
     onTranscript(role, text) {
@@ -284,8 +352,9 @@
     ui.voice.overlay.classList.remove("hidden");
     ui.voice.overlay.classList.add("flex");
     ui.voice.user.textContent = "";
-    ui.voice.bot.textContent = "Savolingizni ovoz chiqarib bering. Masalan: “SamDU rektori kim?”";
+    ui.voice.bot.textContent = t("voiceHint");
     setMuted(false);
+    voice.lang = lang;
     voice.start();
   }
   function closeVoiceOverlay() {
@@ -299,7 +368,7 @@
     ui.voice.mute.querySelector(".mic-off").classList.toggle("hidden", !m);
     ui.voice.mute.classList.toggle("is-muted", m);
     ui.voice.orb.dataset.muted = m ? "true" : "false";
-    if (voice.state === "listening") ui.voice.status.textContent = m ? "Mikrofon o'chirilgan" : STATUS.listening;
+    if (voice.state === "listening") ui.voice.status.textContent = m ? t("micMuted") : t("status").listening;
   }
 
   // ---------- Hodisalar ----------
@@ -334,7 +403,7 @@
 
   function startVoice() {
     if (!navigator.mediaDevices || !window.AudioWorkletNode) {
-      toast("Brauzeringiz ovozli suhbatni qo'llab-quvvatlamaydi (HTTPS kerak).");
+      toast(t("unsupported"));
       return;
     }
     openVoice();
@@ -348,6 +417,9 @@
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); resetChat(); }
   });
 
+  window.voice = voice;
+  document.querySelectorAll(".lang-set").forEach((b) => b.addEventListener("click", () => applyLang(b.dataset.lang)));
+  applyLang(lang);
   restore();
   autoResize();
 

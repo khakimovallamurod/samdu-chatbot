@@ -15,13 +15,12 @@ from google.genai import types
 
 from config import (
     GOOGLE_API_KEY,
-    LIVE_LANGUAGE,
     LIVE_MODEL,
     LIVE_SESSION_START_MINUTES,
     LIVE_TOKEN_TTL_MINUTES,
     LIVE_VOICE,
 )
-from prompts import VOICE_SYSTEM_PROMPT
+from prompts import voice_system_prompt
 
 LIVE_WS_URL = (
     "wss://generativelanguage.googleapis.com/ws/"
@@ -57,18 +56,26 @@ def _get_client() -> genai.Client:
     return _client
 
 
-def _live_config() -> types.LiveConnectConfig:
+# Til bo'yicha sozlamalar: javob nutqi tili va nutqni tanish tillari
+_LANG = {
+    "uz": {"speech": "uz", "input": ["uz-UZ", "ru-RU"], "output": ["uz-UZ"]},
+    "en": {"speech": "en", "input": ["en-US", "uz-UZ"], "output": ["en-US"]},
+}
+
+
+def _live_config(lang: str) -> types.LiveConnectConfig:
+    cfg = _LANG.get(lang, _LANG["uz"])
     return types.LiveConnectConfig(
         response_modalities=["AUDIO"],
-        system_instruction=VOICE_SYSTEM_PROMPT,
+        system_instruction=voice_system_prompt(lang),
         temperature=0.3,  # past harorat — javob o'rtasida boshqa tilga o'tib ketmaslik uchun
-        # Javob nutqi o'zbek tilida sintez qilinadi
+        # Javob nutqi tanlangan tilda sintez qilinadi
         speech_config=types.SpeechConfig(
-            language_code=LIVE_LANGUAGE,
+            language_code=cfg["speech"],
             voice_config=types.VoiceConfig(prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=LIVE_VOICE)),
         ),
-        # Foydalanuvchi nutqi o'zbekcha (yoki ruscha) deb taniladi — shovqin boshqa til so'ziga aylanib ketmasligi uchun
-        input_audio_transcription=types.AudioTranscriptionConfig(language_codes=["uz-UZ", "ru-RU"]),
+        # Nutqni tanish faqat kutilgan tillar bilan — shovqin boshqa til so'ziga aylanib ketmasligi uchun
+        input_audio_transcription=types.AudioTranscriptionConfig(language_codes=cfg["input"]),
         # Nutqni aniqlash: fon shovqiniga kamroq sezgir, gap tugashini biroz uzoqroq kutadi
         realtime_input_config=types.RealtimeInputConfig(
             automatic_activity_detection=types.AutomaticActivityDetection(
@@ -78,13 +85,14 @@ def _live_config() -> types.LiveConnectConfig:
                 silence_duration_ms=800,
             )
         ),
-        output_audio_transcription=types.AudioTranscriptionConfig(language_codes=["uz-UZ"]),
+        output_audio_transcription=types.AudioTranscriptionConfig(language_codes=cfg["output"]),
         tools=[types.Tool(function_declarations=[SEARCH_TOOL])],
         context_window_compression=types.ContextWindowCompressionConfig(sliding_window=types.SlidingWindow()),
     )
 
 
-def create_live_token() -> dict:
+def create_live_token(lang: str = "uz") -> dict:
+    lang = lang if lang in _LANG else "uz"
     now = dt.datetime.now(tz=dt.timezone.utc)
     expires = now + dt.timedelta(minutes=LIVE_TOKEN_TTL_MINUTES)
     start_deadline = now + dt.timedelta(minutes=LIVE_SESSION_START_MINUTES)
@@ -93,7 +101,7 @@ def create_live_token() -> dict:
             uses=1,
             expire_time=expires,
             new_session_expire_time=start_deadline,
-            live_connect_constraints=types.LiveConnectConstraints(model=LIVE_MODEL, config=_live_config()),
+            live_connect_constraints=types.LiveConnectConstraints(model=LIVE_MODEL, config=_live_config(lang)),
             http_options={"api_version": "v1alpha"},
         )
     )
@@ -108,4 +116,5 @@ def create_live_token() -> dict:
             "output": {"encoding": "pcm_s16le", "sample_rate": 24000, "channels": 1},
         },
         "tool": {"name": SEARCH_TOOL["name"], "endpoint": "/api/v1/search"},
+        "lang": lang,
     }

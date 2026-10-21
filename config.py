@@ -23,14 +23,14 @@ def _env(name: str, default):
 
 
 # API kalit (faqat serverda saqlanadi, mijozga hech qachon yuborilmaydi)
-GOOGLE_API_KEY = _env("GOOGLE_API_KEY", "")
+GOOGLE_API_KEY = _env("AI_API_KEY", "") or _env("GOOGLE_API_KEY", "")
 
 # Modellar
 CHAT_MODEL = _env("CHAT_MODEL", "gemini-3.5-flash")
 CHAT_THINKING_LEVEL = _env("CHAT_THINKING_LEVEL", "minimal")
+CHAT_THINKING_LEVEL_NUMERIC = _env("CHAT_THINKING_LEVEL_NUMERIC", "low")  # formula/raqamli savollar uchun
 LIVE_MODEL = _env("LIVE_MODEL", "gemini-3.8-live")
 LIVE_VOICE = _env("LIVE_VOICE", "Kore")
-LIVE_LANGUAGE = _env("LIVE_LANGUAGE", "uz")   # ovozli javob tili (ISO 639-1)
 EMBED_MODEL = _env("EMBED_MODEL", "gemini-embedding-2")
 EMBED_DIM = _env("EMBED_DIM", 768)
 
@@ -96,6 +96,7 @@ SOURCE_WEIGHTS = {
     "kredit_modul_tizimi_RAG.txt": 1.2,
     "oliy_talim_qabul_nizom_RAG.txt": 1.2,
     "tyutorlik_rag_chatbot.txt": 1.2,
+    "vm_qaror_578_qabul_toliq.txt": 1.2,
 }
 
 # Manbalarning foydalanuvchiga ko'rinadigan nomlari (fayl nomlari hech qachon ko'rsatilmaydi)
@@ -117,6 +118,7 @@ SOURCE_TITLES = {
     "samdu_tarix_RAG.txt": "SamDU tarixi",
     "samdu_universitet_RAG.txt": "SamDU haqida umumiy ma'lumot",
     "tyutorlik_rag_chatbot.txt": "Tyutorlik faoliyati (VM qarori, 656-son)",
+    "vm_qaror_578_qabul_toliq.txt": "Qabul, o'qishni ko'chirish va akademik mobillik (VM qarori, 578-son)",
     "web_ai_lab_sampc_uz.txt": "SamDU Sun'iy intellekt laboratoriyasi",
     "web_www_samdu_uz.txt": "samdu.uz rasmiy sayti",
 }

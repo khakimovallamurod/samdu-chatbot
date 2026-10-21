@@ -13,7 +13,7 @@ Interaktiv hujjat (Swagger): **`/api/docs`** · OpenAPI spetsifikatsiyasi: **`/a
 | `/chat/stream` | POST | Javobni oqim (SSE) ko'rinishida olish |
 | `/live/token` | POST | Ovozli seans uchun bir martalik token |
 | `/search` | POST | Bilim bazasidan qidiruv (ovozli seansdagi funksiya chaqiruvi uchun) |
-| `/suggestions` | GET | Tezkor savollar ro'yxati |
+| `/suggestions?lang=uz\|en` | GET | Tezkor savollar ro'yxati |
 | `/health` | GET | Xizmat holati |
 
 ---
@@ -28,11 +28,14 @@ Interaktiv hujjat (Swagger): **`/api/docs`** · OpenAPI spetsifikatsiyasi: **`/a
   "history": [
     {"role": "user", "content": "Salom"},
     {"role": "assistant", "content": "Assalomu alaykum! ..."}
-  ]
+  ],
+  "lang": "uz"
 }
 ```
 
 - `question` — majburiy, 1000 belgigacha. O'zbek (lotin/kirill), rus va ingliz tillarida.
+- `lang` — ixtiyoriy, `"uz"` yoki `"en"` (ilovada tanlangan til). Javob **savol tilida** beriladi:
+  inglizcha savolga — inglizcha, o'zbekcha savolga — o'zbekcha. Til aniq bo'lmasa (masalan, "GPA"), `lang` ishlatiladi.
 - `history` — ixtiyoriy. Server suhbatni **saqlamaydi**; davomiy savollar ("uning telefoni-chi?") uchun
   ilova oxirgi xabarlarni yuboradi (oxirgi 6 tasi hisobga olinadi, har biri 1500 belgigacha).
 
@@ -120,6 +123,8 @@ Ilova ──POST /search──────▶ Server          (bilim bazasidan m
 
 ### 2.1. Token olish — `POST /live/token`
 
+So'rov tanasi (ixtiyoriy): `{"lang": "en"}` — ovozli yordamchi tili (`uz` standart). Tanlangan tilda gapiradi va tinglaydi.
+
 ```json
 {
   "status": "success",
@@ -132,7 +137,8 @@ Ilova ──POST /search──────▶ Server          (bilim bazasidan m
     "input":  {"encoding": "pcm_s16le", "sample_rate": 16000, "channels": 1, "mime_type": "audio/pcm;rate=16000"},
     "output": {"encoding": "pcm_s16le", "sample_rate": 24000, "channels": 1}
   },
-  "tool": {"name": "search_samdu", "endpoint": "/api/v1/search"}
+  "tool": {"name": "search_samdu", "endpoint": "/api/v1/search"},
+  "lang": "en"
 }
 ```
 

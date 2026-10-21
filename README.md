@@ -1,6 +1,7 @@
 # SamDU AI Yordamchi
 
 Sharof Rashidov nomidagi Samarqand davlat universiteti uchun matnli va ovozli AI yordamchi.
+SamDU Sun'iy intellekt va raqamli texnologiyalar laboratoriyasi ishlanmasi. O'zbek va ingliz tillarida ishlaydi.
 Faqat SamDU haqidagi ma'lumotlar asosida javob beradi (`new-documents/` + www.samdu.uz + ai-lab.sampc.uz).
 
 ## Tuzilma
@@ -22,7 +23,7 @@ Faqat SamDU haqidagi ma'lumotlar asosida javob beradi (`new-documents/` + www.sa
 
 ```bash
 pip install -r requirements.txt
-echo "GOOGLE_API_KEY=..." > .env
+echo "AI_API_KEY=..." > .env
 python ingest.py            # bazani qurish (~30 s)
 python flaskapp.py          # http://localhost:8800
 ```
@@ -67,9 +68,8 @@ location / {
 
 | O'zgaruvchi | Standart | Izoh |
 |---|---|---|
-| `CHAT_MODEL` | `gemini-3.5-flash` | Matnli javob modeli |
-| `CHAT_THINKING_LEVEL` | `minimal` | `minimal` eng tez; murakkab savollar uchun `low` |
-| `LIVE_MODEL` | `gemini-3.8-live` | Ovozli model |
+| `CHAT_THINKING_LEVEL` | `minimal` | Oddiy savollar uchun (eng tez) |
+| `CHAT_THINKING_LEVEL_NUMERIC` | `low` | Formula va raqamli savollar uchun (aniqroq) |
 | `LIVE_VOICE` | `Kore` | Ovoz |
 | `MAX_VECTOR_DISTANCE` | `0.36` | Qidiruvda o'xshashlik chegarasi |
 | `RATE_LIMIT_CHAT` / `_SEARCH` / `_LIVE_TOKEN` | `20` / `60` / `6` | Daqiqasiga, har bir IP |

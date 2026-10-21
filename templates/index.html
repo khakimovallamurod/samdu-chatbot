@@ -17,6 +17,9 @@
       if (theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
         document.documentElement.classList.add("dark");
       }
+      let lang = null;
+      try { lang = localStorage.getItem("samdu-lang"); } catch (e) {}
+      document.documentElement.lang = lang === "en" ? "en" : "uz";
     })();
   </script>
   <script src="https://cdn.tailwindcss.com/3.4.5"></script>
@@ -37,6 +40,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
   <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
 </head>
 
@@ -49,7 +53,7 @@
         <img src="{{ url_for('static', filename='images/samdulogo.png') }}" alt="SamDU" class="h-9 w-9 rounded-full bg-white ring-1 ring-zinc-200 dark:ring-zinc-700" />
         <div class="min-w-0 leading-tight">
           <p class="text-[15px] font-semibold tracking-tight text-zinc-900 dark:text-white">SamDU</p>
-          <p class="truncate text-xs text-zinc-500 dark:text-zinc-400">AI yordamchi</p>
+          <p class="truncate text-xs text-zinc-500 dark:text-zinc-400" data-i18n="assistant">AI yordamchi</p>
         </div>
         <button id="closeSidebar" class="icon-btn ml-auto lg:hidden" aria-label="Menyuni yopish">
           <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" d="M6 18 18 6M6 6l12 12"/></svg>
@@ -61,19 +65,19 @@
           <span class="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-600 text-white dark:bg-emerald-500 dark:text-zinc-950">
             <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.6"><path stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>
           </span>
-          Yangi suhbat
+          <span data-i18n="newChat">Yangi suhbat</span>
           <kbd class="ml-auto hidden rounded border border-zinc-200 px-1.5 text-[10px] font-medium text-zinc-400 dark:border-zinc-700 sm:inline">Ctrl K</kbd>
         </button>
       </div>
 
       <nav class="thin-scroll mt-6 flex-1 overflow-y-auto px-3">
-        <p class="px-2 text-[11px] font-semibold uppercase tracking-[.08em] text-zinc-400 dark:text-zinc-500">Mavzular</p>
+        <p class="px-2 text-[11px] font-semibold uppercase tracking-[.08em] text-zinc-400 dark:text-zinc-500" data-i18n="topics">Mavzular</p>
         <ul class="mt-2 space-y-0.5">
           {% for s in suggestions %}
           <li>
-            <button class="group flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-sm text-zinc-600 transition hover:bg-zinc-200/60 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100" data-question="{{ s.question }}">
+            <button class="group flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-sm text-zinc-600 transition hover:bg-zinc-200/60 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100" data-question="{{ s.question.uz }}" data-q-uz="{{ s.question.uz }}" data-q-en="{{ s.question.en }}">
               <span class="text-zinc-400 transition group-hover:text-emerald-600 dark:text-zinc-500 dark:group-hover:text-emerald-400">{{ s.icon|safe }}</span>
-              <span class="truncate">{{ s.title }}</span>
+              <span class="truncate" data-t-uz="{{ s.title.uz }}" data-t-en="{{ s.title.en }}">{{ s.title.uz }}</span>
             </button>
           </li>
           {% endfor %}
@@ -99,11 +103,11 @@
         <div class="grid grid-cols-2 gap-1 rounded-xl bg-zinc-200/70 p-1 text-xs font-medium dark:bg-zinc-800">
           <button class="theme-set flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-zinc-500 transition dark:text-zinc-400" data-theme="light">
             <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/></svg>
-            Yorug'
+            <span data-i18n="light">Yorug'</span>
           </button>
           <button class="theme-set flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-zinc-500 transition dark:text-zinc-400" data-theme="dark">
             <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>
-            Qorong'i
+            <span data-i18n="dark">Qorong'i</span>
           </button>
         </div>
       </div>
@@ -117,13 +121,18 @@
           <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" d="M3.75 7h16.5M3.75 12h16.5M3.75 17h10.5"/></svg>
         </button>
         <div class="min-w-0">
-          <h1 class="truncate text-[15px] font-semibold tracking-tight text-zinc-900 dark:text-white">Samarqand davlat universiteti</h1>
+          <h1 class="truncate text-[15px] font-semibold tracking-tight text-zinc-900 dark:text-white" data-i18n="university">Samarqand davlat universiteti</h1>
           <p class="flex items-center gap-1.5 whitespace-nowrap text-xs text-zinc-500 dark:text-zinc-400">
             <span class="relative flex h-1.5 w-1.5"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60"></span><span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500"></span></span>
-            Rasmiy AI yordamchi
+            <span data-i18n="official">Rasmiy AI yordamchi</span>
           </p>
         </div>
         <div class="ml-auto flex items-center gap-1">
+          <!-- Til tanlash -->
+          <div class="mr-1 flex rounded-lg bg-zinc-100 p-0.5 text-xs font-semibold dark:bg-zinc-800" role="group" aria-label="Til / Language">
+            <button class="lang-set rounded-md px-2.5 py-1 text-zinc-500 transition dark:text-zinc-400" data-lang="uz">UZ</button>
+            <button class="lang-set rounded-md px-2.5 py-1 text-zinc-500 transition dark:text-zinc-400" data-lang="en">EN</button>
+          </div>
           <button class="theme-toggle icon-btn" title="Mavzuni almashtirish" aria-label="Mavzuni almashtirish">
             <svg class="h-[18px] w-[18px] dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>
             <svg class="hidden h-[18px] w-[18px] dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/></svg>
@@ -140,17 +149,17 @@
           <div class="hero-logo relative">
             <img src="{{ url_for('static', filename='images/samdulogo.png') }}" alt="SamDU" class="relative h-20 w-20 rounded-full bg-white ring-1 ring-zinc-200 dark:ring-zinc-700" />
           </div>
-          <h2 class="mt-6 text-[28px] font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">Qanday yordam bera olaman?</h2>
+          <h2 class="mt-6 text-[28px] font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-4xl" data-i18n="welcomeTitle">Qanday yordam bera olaman?</h2>
           <p class="mt-3 max-w-lg text-[15px] leading-relaxed text-zinc-500 dark:text-zinc-400">
-            Qabul, fakultetlar, rahbariyat va universitet tartib-qoidalari haqida yozing yoki <button type="button" class="voice-link font-medium text-emerald-600 underline decoration-emerald-600/30 underline-offset-4 hover:decoration-emerald-600 dark:text-emerald-400">ovozli so'rang</button>.
+            <span data-i18n="welcomeText">Qabul, fakultetlar, rahbariyat va universitet tartib-qoidalari haqida yozing yoki</span> <button type="button" class="voice-link font-medium text-emerald-600 underline decoration-emerald-600/30 underline-offset-4 hover:decoration-emerald-600 dark:text-emerald-400" data-i18n="welcomeVoice">ovozli so'rang</button>.
           </p>
           <div class="mt-10 grid w-full grid-cols-1 gap-2.5 sm:grid-cols-2">
             {% for s in suggestions[:4] %}
-            <button class="group flex items-center gap-3 rounded-2xl border border-zinc-200 bg-white px-4 py-3.5 text-left transition hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900" data-question="{{ s.question }}">
+            <button class="group flex items-center gap-3 rounded-2xl border border-zinc-200 bg-white px-4 py-3.5 text-left transition hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900" data-question="{{ s.question.uz }}" data-q-uz="{{ s.question.uz }}" data-q-en="{{ s.question.en }}">
               <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">{{ s.icon|safe }}</span>
               <span class="min-w-0 flex-1">
-                <span class="block text-sm font-medium text-zinc-900 dark:text-zinc-100">{{ s.title }}</span>
-                <span class="mt-0.5 block truncate text-[13px] text-zinc-500 dark:text-zinc-400">{{ s.question }}</span>
+                <span class="block text-sm font-medium text-zinc-900 dark:text-zinc-100" data-t-uz="{{ s.title.uz }}" data-t-en="{{ s.title.en }}">{{ s.title.uz }}</span>
+                <span class="mt-0.5 block truncate text-[13px] text-zinc-500 dark:text-zinc-400" data-t-uz="{{ s.question.uz }}" data-t-en="{{ s.question.en }}">{{ s.question.uz }}</span>
               </span>
               <svg class="h-4 w-4 shrink-0 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12l-7.5 7.5M21 12H3"/></svg>
             </button>
@@ -163,7 +172,7 @@
       <!-- Composer -->
       <footer class="shrink-0 px-3 pb-[max(env(safe-area-inset-bottom),12px)] sm:px-6">
         <form id="composer" class="mx-auto flex w-full max-w-3xl items-end gap-2 rounded-[26px] border border-zinc-200 bg-white p-2 pl-4 shadow-composer transition focus-within:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:focus-within:border-zinc-700">
-          <textarea id="input" rows="1" maxlength="1000" placeholder="SamDU haqida savol bering..." class="max-h-48 min-h-[40px] flex-1 resize-none bg-transparent py-2 text-[15px] leading-6 text-zinc-900 placeholder:text-zinc-400 focus:outline-none dark:text-zinc-100 dark:placeholder:text-zinc-500"></textarea>
+          <textarea id="input" rows="1" maxlength="1000" placeholder="SamDU haqida savol bering..." data-i18n-placeholder="placeholder" class="max-h-48 min-h-[40px] flex-1 resize-none bg-transparent py-2 text-[15px] leading-6 text-zinc-900 placeholder:text-zinc-400 focus:outline-none dark:text-zinc-100 dark:placeholder:text-zinc-500"></textarea>
           <button type="button" id="micBtn" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white" title="Ovozli suhbat" aria-label="Ovozli suhbat">
             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z"/></svg>
           </button>
@@ -173,7 +182,7 @@
             <svg class="icon-send hidden h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5m0 0-6 6m6-6 6 6"/></svg>
           </button>
         </form>
-        <p class="mx-auto mt-2 max-w-3xl text-center text-[11px] text-zinc-400 dark:text-zinc-500">© 2026 SamDU Sun'iy intellekt laboratoriyasi · Muhim ma'lumotlarni rasmiy manbalardan tekshiring</p>
+        <p class="mx-auto mt-2 max-w-3xl text-center text-[11px] text-zinc-400 dark:text-zinc-500" data-i18n="footer">© 2026 SamDU Sun'iy intellekt va raqamli texnologiyalar laboratoriyasi · Muhim ma'lumotlarni rasmiy manbalardan tekshiring</p>
       </footer>
     </main>
   </div>
@@ -182,7 +191,7 @@
   <div id="voiceOverlay" class="fixed inset-0 z-50 hidden flex-col items-center bg-white px-6 pb-[max(env(safe-area-inset-bottom),28px)] pt-5 dark:bg-zinc-950" role="dialog" aria-modal="true" aria-label="Ovozli suhbat">
     <div class="flex w-full max-w-3xl items-center gap-3">
       <img src="{{ url_for('static', filename='images/samdulogo.png') }}" alt="" class="h-8 w-8 rounded-full bg-white ring-1 ring-zinc-200 dark:ring-zinc-700" />
-      <p class="text-sm font-semibold text-zinc-900 dark:text-white">SamDU ovozli yordamchi</p>
+      <p class="text-sm font-semibold text-zinc-900 dark:text-white" data-i18n="voiceTitle">SamDU ovozli yordamchi</p>
       <span class="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">Live</span>
     </div>
 
@@ -225,6 +234,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script src="{{ url_for('static', filename='js/voice.js') }}"></script>
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
