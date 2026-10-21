@@ -24,7 +24,7 @@
     uz: {
       pageTitle: "SamDU AI Yordamchi",
       assistant: "AI yordamchi", newChat: "Yangi suhbat", topics: "Mavzular", light: "Yorug'", dark: "Qorong'i",
-      university: "Samarqand davlat universiteti", official: "Rasmiy AI yordamchi",
+      university: "Sharof Rashidov nomidagi Samarqand davlat universiteti", official: "Rasmiy sun'iy intellekt yordamchisi",
       welcomeTitle: "Qanday yordam bera olaman?",
       welcomeText: "Qabul, fakultetlar, rahbariyat va universitet tartib-qoidalari haqida yozing yoki",
       welcomeVoice: "ovozli so'rang",
@@ -42,7 +42,7 @@
     en: {
       pageTitle: "SamSU AI Assistant",
       assistant: "AI assistant", newChat: "New chat", topics: "Topics", light: "Light", dark: "Dark",
-      university: "Samarkand State University", official: "Official AI assistant",
+      university: "Samarkand State University named after Sharof Rashidov", official: "Official artificial intelligence assistant",
       welcomeTitle: "How can I help you?",
       welcomeText: "Ask about admission, faculties, leadership and university regulations, or",
       welcomeVoice: "ask by voice",
