@@ -1,0 +1,128 @@
+/* SamDU AI yordamchi — Tailwind ustiga qo'shimcha uslublar (neytral + yashil urg'u) */
+
+html, body { transition: background-color .25s ease; }
+
+.thin-scroll { scrollbar-width: thin; scrollbar-color: rgba(113, 113, 122, .3) transparent; }
+.thin-scroll::-webkit-scrollbar { width: 8px; }
+.thin-scroll::-webkit-scrollbar-thumb { background: rgba(113, 113, 122, .3); border-radius: 8px; }
+
+.icon-btn { display: inline-flex; height: 2.25rem; width: 2.25rem; align-items: center; justify-content: center; border-radius: .6rem; color: #71717a; transition: background .15s, color .15s; }
+.icon-btn:hover { background: #f4f4f5; color: #18181b; }
+.dark .icon-btn { color: #a1a1aa; }
+.dark .icon-btn:hover { background: #27272a; color: #fafafa; }
+
+/* Sidebar mavzu almashtirgichi: faol holat */
+html:not(.dark) .theme-set[data-theme="light"], .dark .theme-set[data-theme="dark"] { background: #fff; color: #18181b; box-shadow: 0 1px 2px rgba(0, 0, 0, .08); }
+.dark .theme-set[data-theme="dark"] { background: #3f3f46; color: #fafafa; }
+
+/* Bosh sahifa logotipi atrofidagi yumshoq nur */
+.hero-logo::before { content: ""; position: absolute; inset: -22px; border-radius: 50%; background: radial-gradient(circle, rgba(16, 185, 129, .18), transparent 70%); }
+
+/* Xabarlar */
+.msg-enter { animation: msgIn .28s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes msgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.prose-chat { font-size: 15.5px; line-height: 1.75; overflow-wrap: anywhere; color: #27272a; }
+.dark .prose-chat { color: #e4e4e7; }
+.prose-chat > :first-child { margin-top: 0; }
+.prose-chat > :last-child { margin-bottom: 0; }
+.prose-chat p { margin: .6em 0; }
+.prose-chat strong { font-weight: 600; color: #09090b; }
+.dark .prose-chat strong { color: #fff; }
+.prose-chat h1, .prose-chat h2, .prose-chat h3, .prose-chat h4 { font-weight: 600; color: #09090b; margin: 1.1em 0 .45em; line-height: 1.35; letter-spacing: -.01em; }
+.dark .prose-chat h1, .dark .prose-chat h2, .dark .prose-chat h3, .dark .prose-chat h4 { color: #fff; }
+.prose-chat h1 { font-size: 1.25em; } .prose-chat h2 { font-size: 1.15em; } .prose-chat h3, .prose-chat h4 { font-size: 1.05em; }
+.prose-chat ul, .prose-chat ol { margin: .55em 0; padding-left: 1.4em; }
+.prose-chat ul { list-style: disc; } .prose-chat ol { list-style: decimal; }
+.prose-chat li { margin: .3em 0; padding-left: .2em; }
+.prose-chat li::marker { color: #10b981; }
+.prose-chat ol li::marker { color: #71717a; font-weight: 500; }
+.prose-chat a { color: #059669; text-decoration: underline; text-decoration-color: rgba(5, 150, 105, .35); text-underline-offset: 3px; }
+.prose-chat a:hover { text-decoration-color: currentColor; }
+.dark .prose-chat a { color: #34d399; }
+.prose-chat code { background: #f4f4f5; padding: .12em .38em; border-radius: .35em; font-size: .88em; }
+.dark .prose-chat code { background: #27272a; }
+.prose-chat blockquote { border-left: 3px solid #10b981; padding-left: .9em; color: #52525b; margin: .7em 0; }
+.dark .prose-chat blockquote { color: #a1a1aa; }
+.prose-chat hr { border-color: #e4e4e7; margin: 1.2em 0; }
+.dark .prose-chat hr { border-color: #27272a; }
+.prose-chat table { width: 100%; border-collapse: collapse; margin: .8em 0; font-size: .92em; display: block; overflow-x: auto; }
+.prose-chat th, .prose-chat td { border-bottom: 1px solid #e4e4e7; padding: .5em .7em; text-align: left; }
+.prose-chat th { font-weight: 600; color: #18181b; }
+.dark .prose-chat th, .dark .prose-chat td { border-color: #27272a; }
+.dark .prose-chat th { color: #fafafa; }
+
+.streaming-cursor > :is(p, h1, h2, h3, h4, blockquote):last-child::after,
+.streaming-cursor > :is(ul, ol):last-child > li:last-child::after {
+  content: ""; display: inline-block; width: 9px; height: 9px; margin-left: 5px; vertical-align: .05em;
+  background: #10b981; border-radius: 50%; animation: cursorPulse 1s ease-in-out infinite;
+}
+@keyframes cursorPulse { 50% { transform: scale(.55); opacity: .5; } }
+
+/* "O'ylayapti" indikatori */
+.thinking { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: #71717a; }
+.thinking-dot { width: 10px; height: 10px; border-radius: 50%; background: #10b981; animation: thinkPulse 1.2s ease-in-out infinite; }
+.shimmer { background: linear-gradient(90deg, #a1a1aa 0%, #27272a 50%, #a1a1aa 100%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 1.8s linear infinite; }
+.dark .shimmer { background-image: linear-gradient(90deg, #52525b 0%, #f4f4f5 50%, #52525b 100%); }
+@keyframes thinkPulse { 0%, 100% { transform: scale(.7); opacity: .55; } 50% { transform: scale(1); opacity: 1; } }
+@keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+
+/* ================= Ovozli rejim ================= */
+.voice-ctrl { display: flex; height: 3.5rem; width: 3.5rem; align-items: center; justify-content: center; border-radius: 9999px; background: #f4f4f5; color: #18181b; transition: background .15s, transform .15s; }
+.voice-ctrl:hover { background: #e4e4e7; }
+.voice-ctrl:active { transform: scale(.94); }
+.dark .voice-ctrl { background: #27272a; color: #fafafa; }
+.dark .voice-ctrl:hover { background: #3f3f46; }
+.voice-ctrl.is-muted { background: #fee2e2; color: #dc2626; }
+.dark .voice-ctrl.is-muted { background: rgba(220, 38, 38, .18); color: #f87171; }
+
+.voice-orb { --level: 0; position: relative; width: min(320px, 76vw); aspect-ratio: 1; display: grid; place-items: center; }
+
+/* Jarvis uslubidagi aylanuvchi halqalar */
+.orb-rings { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.orb-rings .ring { fill: none; stroke: #10b981; transform-origin: 150px 150px; transform-box: view-box; }
+.r-base { stroke-width: 1; opacity: .18; }
+.r-ticks { stroke-width: 5; stroke-dasharray: 1.2 9.8; opacity: .35; animation: spin 40s linear infinite; }
+.r-arcs { stroke-width: 2; stroke-linecap: round; stroke-dasharray: 120 40 30 60 200 90 60 223; opacity: .7; animation: spin 14s linear infinite; }
+.r-arcs2 { stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 60 120 18 80 140 355; opacity: .45; animation: spin 9s linear infinite reverse; }
+.dark .orb-rings .ring { stroke: #34d399; }
+
+/* ChatGPT uslubidagi bulutli shar */
+.orb-glow { position: absolute; width: 64%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(16, 185, 129, .45), transparent 68%); filter: blur(24px); transform: scale(calc(1.05 + var(--level) * .7)); transition: transform .1s linear; }
+.orb-sphere {
+  position: relative; width: 62%; aspect-ratio: 1; border-radius: 50%; overflow: hidden; isolation: isolate;
+  background: radial-gradient(circle at 34% 28%, #ffffff 0%, #d1fae5 26%, #6ee7b7 52%, #10b981 78%, #047857 100%);
+  box-shadow: 0 30px 70px -24px rgba(5, 150, 105, .55), inset 0 -18px 40px rgba(4, 120, 87, .35);
+  transform: scale(calc(1 + var(--level) * .14)); transition: transform .09s linear;
+}
+.dark .orb-sphere {
+  background: radial-gradient(circle at 34% 28%, #ecfdf5 0%, #6ee7b7 24%, #10b981 50%, #047857 76%, #022c22 100%);
+  box-shadow: 0 0 80px -10px rgba(16, 185, 129, .45), inset 0 -18px 40px rgba(2, 44, 34, .6);
+}
+.orb-cloud { position: absolute; inset: -30%; filter: blur(16px); }
+.c1 { background: radial-gradient(closest-side at 28% 38%, rgba(255, 255, 255, .95), transparent), radial-gradient(closest-side at 72% 68%, rgba(255, 255, 255, .65), transparent); mix-blend-mode: screen; animation: spin 11s linear infinite; }
+.c2 { background: radial-gradient(closest-side at 62% 26%, rgba(236, 253, 245, .9), transparent), radial-gradient(closest-side at 32% 78%, rgba(209, 250, 229, .7), transparent); mix-blend-mode: screen; animation: spin 16s linear infinite reverse; }
+.c3 { background: conic-gradient(from 90deg, transparent, rgba(4, 120, 87, .55), transparent 35%, rgba(5, 150, 105, .4), transparent 70%); filter: blur(22px); mix-blend-mode: multiply; animation: spin 20s linear infinite; }
+.dark .c3 { mix-blend-mode: normal; opacity: .6; }
+.orb-shine { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, .8), transparent 28%); }
+
+/* Holatlar */
+.voice-orb[data-state="connecting"] .orb-sphere { animation: breathe 1.6s ease-in-out infinite; }
+.voice-orb[data-state="connecting"] .r-arcs { animation-duration: 3s; }
+.voice-orb[data-state="connecting"] .r-arcs2 { animation-duration: 2.2s; }
+.voice-orb[data-state="searching"] .r-arcs { animation-duration: 1.8s; opacity: 1; }
+.voice-orb[data-state="searching"] .r-arcs2 { animation-duration: 1.3s; opacity: .9; }
+.voice-orb[data-state="searching"] .r-ticks { animation-duration: 8s; opacity: .6; }
+.voice-orb[data-state="searching"] .orb-cloud { animation-duration: 3s; }
+.voice-orb[data-state="speaking"] .c1 { animation-duration: 5s; }
+.voice-orb[data-state="speaking"] .c2 { animation-duration: 7s; }
+.voice-orb[data-state="speaking"] .r-arcs { animation-duration: 7s; opacity: .9; }
+.voice-orb[data-muted="true"] .orb-sphere, .voice-orb[data-muted="true"] .orb-rings { filter: grayscale(1); opacity: .55; }
+.voice-orb[data-muted="true"] .orb-glow { opacity: 0; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes breathe { 0%, 100% { transform: scale(.94); } 50% { transform: scale(1.03); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .msg-enter, .thinking-dot, .shimmer, .orb-cloud, .orb-rings .ring, .orb-sphere, .streaming-cursor *::after { animation: none !important; }
+}

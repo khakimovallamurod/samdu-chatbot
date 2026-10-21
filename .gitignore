@@ -1,0 +1,21 @@
+# Maxfiy sozlamalar (API kalit)
+.env
+
+# Vektor baza — `python ingest.py` bilan qayta quriladi
+chroma_db/
+*.sqlite3
+
+# Xom PDF hujjatlar (katta hajm; matnli versiyasi new-documents/ da)
+documents/
+
+# Python
+__pycache__/
+*.pyc
+env/
+venv/
+.venv/
+
+# Boshqa
+.codex
+.vscode/
+.idea/

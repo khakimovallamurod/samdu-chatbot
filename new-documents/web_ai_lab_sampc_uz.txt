@@ -1,0 +1,231 @@
+# AI Laboratory — /about
+URL: https://ai-lab.sampc.uz/about
+Laboratoriyaning asosiy vazifalari
+Sun'iy intellekt va zamonaviy texnologiyalar orqali ilm-fan va jamiyatga hissa qo'shish
+Tibbiy tashxislash
+Tibbiy tasvirlar, signallar va ma'lumotlarni raqamli ishlov berish hamda qayta ishlash asosida tashxislash uchun AI model va algoritmlar yaratish
+Atrof-muhit monitoringi
+Sensor qurilmalari orqali havo va suvning ifloslanish darajalarini aniqlash uchun AI model va algoritmlar ishlab chiqish
+Qishloq xo'jaligi
+Tuproq tarkibini aniqlash, ekin ekish va hosildorlikni bashorat qilish uchun AI asosidagi modellar ishlab chiqish
+Iqtisodiy tahlil
+Iqtisodiy ko'rsatkichlarni intellektual qayta ishlash orqali barqarorlikni tahlil qiluvchi AI modellar ishlab chiqish
+Robototexnika va NLP
+Robot qurilmalarini yaratish, boshqarish va tabiiy til modellari orqali xizmat sifatini oshirish
+AI Laboratory
+Robotlar, kompyuterlar, amaliy tadqiqotlar
+Researchers
+Projects
+Research Areas
+Machine Learning & Deep Learning
+Natural Language Processing
+Computer Vision
+Robotics & Automation
+Neural Networks
+Data Science & Analytics
+AI Ethics & Safety
+Reinforcement Learning
+View Projects
+
+# AI Laboratory — /news
+URL: https://ai-lab.sampc.uz/news
+Laboratoriyamizning yangiliklari va e'lonlari
+Yangiliklar
+E'lonlar
+Yangilik
+09 Apr 2026
+SamDU AI yordamchi sun'iy intellekt tizimi
+Samarqand davlat universiteti uchun yordamchi chatbot tizimi.
+Batafsil
+
+# AI Laboratory — /projects
+URL: https://ai-lab.sampc.uz/projects
+All
+AI
+Computer Vision
+Machine Learning
+NLP
+2026
+SamSU AI assistant artificial intelligence system
+Assistant chatbot system for Samarkand State University
+Visit Project
+AI
+2026
+Artificial intelligence system that recommends crops based on soil composition
+A platform for crop recommendations based on soil composition analysis based on artificial intelligence
+Visit Project
+Computer Vision
+2026
+A system designed to detect skin cancer using artificial intelligence.
+Skin cancer detection system using artificial intelligence.
+Visit Project
+AI
+2026
+Intelligent analysis system to identify delays in sales processes
+This project aims to develop an intelligent software system designed to automatically detect and analyze delays in sales...
+Visit Project
+AI
+2026
+Diabetes diagnosis system
+Assessing diabetes using artificial intelligence
+Visit Project
+NLP
+2026
+Mashxura AI
+Popular AI is an intelligent artificial intelligence assistant.
+A modern AI assistant system designed to work on mathema...
+Visit Project
+
+# AI Laboratory — /members
+URL: https://ai-lab.sampc.uz/members
+Laboratoriyamizning ilmiy va tadqiqot jamoasi
+Yarmatov Sherzodjon Shokir o‘g‘li
+Mashinaviy o‘qitish, chuqur o‘qitish, NLP va ma'lumotlar tahlili bo‘yicha mutaxassis
+Samarqand davlat universitetining Sun'iy intellekt va axborot tizimlari kafedrasi mudiri
+Xuramov Latif Yakubboy o'g'li
+Signallarni qayta ishlash, tasvirlarga ishlov berish, mashinaviy o'qitish, chuqur o'qitish, kompyuterli ko'rish bo'yicha mutaxassis
+Sun'iy intellekt va axborot tizimlari kafedrasi dotsenti
+Xamidov Munis Musinovich
+Mashinaviy o‘qitish, chuqur o‘qitish, NLP va Data science bo‘yicha mutaxassis
+Sun'iy intellekt va axborot tizimlari kafedrasi dotsenti
+Sayidqulov Asliddin Xusniddin o'g'li
+AI va Backend dasturchi, mashinaviy o‘qitish, chuqur o‘qitish, kompyuter ko‘rish va yirik til modellari bo‘yicha mutaxassis.
+Sun'iy intellekt va axborot tizimlari kafedrasi dotsenti
+Sariyev Shohruh Norqo'zi o'g'li
+Mashinaviy o‘qitish, chuqur o‘qitish va ma'lumotlar tahlili bo‘yicha mutaxassis
+Raqamli texnologiyalar va sun'iy intellekt ixtisosligi tayanch doktoranti
+Axatov Abror
+Mashinaviy o‘qitish va ma'lumotlar tahlili bo‘yicha mutaxassis
+Raqamli texnologiyalar va sun'iy intellekt ixtisosligi tayanch doktoranti
+Boboxonov Axmadxon Xolmirzoxon o'g'li
+Sun'iy intellekt, kompyuter ko'rishi, tasvirlarni intellektual tahlil qilish, tibbiy tasvirlarni qayta ishlash, mashinaviy o'qitish va chuqur o'qitish algoritmlari bo'yicha tadqiqotchi
+Raqamli texnologiyalar va sun'iy intellekt ixtisosligi tayanch doktoranti
+Salimova Maxbuba Xidirboy qizi
+Sun'iy intellekt bo‘yicha mutaxassis
+Raqamli texnologiyalar va sun'iy intellekt ixtisosligi tayanch doktoranti
+Xakimov Allamurod Anvar o'g'li
+AI va Backend dasturchi, mashinaviy o‘qitish, chuqur o‘qitish, kompyuter ko‘rish va yirik til modellari bo‘yicha mutaxassis
+Sun’iy intellekt va raqamli texnologiyalari fakulteti Dasturiy injenering yo‘nalishi 4 bosqich talabasi
+
+# AI Laboratory — /projects
+URL: https://ai-lab.sampc.uz/projects?category=1
+All
+AI
+Computer Vision
+Machine Learning
+NLP
+AI
+2026
+Artificial intelligence system that recommends crops based on soil composition
+A platform for crop recommendations based on soil composition analysis based on artificial intelligence
+Visit Project
+AI
+2026
+Intelligent analysis system to identify delays in sales processes
+This project aims to develop an intelligent software system designed to automatically detect and analyze delays in sales...
+Visit Project
+AI
+2026
+Diabetes diagnosis system
+Assessing diabetes using artificial intelligence
+Visit Project
+AI
+2026
+Artificial intelligence system for water quality determination.
+A platform for classifying water quality by analyzing water composition using artificial intelligence.
+Visit Project
+AI
+2026
+Intelligent Veterinary Diagnostics Based on Neutrosophic Sets
+A veterinary diagnostic system based on disease detection in cattle using artificial intelligence and neutrosophic analy...
+Visit Project
+
+# AI Laboratory — /projects
+URL: https://ai-lab.sampc.uz/projects?category=3
+All
+AI
+Computer Vision
+Machine Learning
+NLP
+Computer Vision
+2026
+A system designed to detect skin cancer using artificial intelligence.
+Skin cancer detection system using artificial intelligence.
+Visit Project
+Computer Vision
+2026
+Driver fatigue detection system
+AI-based smart system for smart cars
+Visit Project
+Computer Vision
+2026
+SafeVision AI — Automated safety monitoring at construction sites
+It monitors the construction site in real time using existing video cameras, detects whether workers are adhering to saf...
+Visit Project
+Computer Vision
+2026
+SafeChild AI — Child Safety System
+Artificial intelligence detects dangerous objects around the child. When the child approaches sharp or cutting objects,...
+Visit Project
+Computer Vision
+2026
+NeuroScan AI
+Platform for detecting brain tumors using artificial intelligence
+Visit Project
+
+# AI Laboratory — /projects
+URL: https://ai-lab.sampc.uz/projects?category=4
+All
+AI
+Computer Vision
+Machine Learning
+NLP
+2026
+SamSU AI assistant artificial intelligence system
+Assistant chatbot system for Samarkand State University
+Visit Project
+NLP
+2026
+Mashxura AI
+Popular AI is an intelligent artificial intelligence assistant.
+A modern AI assistant system designed to work on mathema...
+Visit Project
+
+# AI Laboratory — /projects
+URL: https://ai-lab.sampc.uz/projects?page=2
+All
+AI
+Computer Vision
+Machine Learning
+NLP
+Computer Vision
+2026
+Driver fatigue detection system
+AI-based smart system for smart cars
+Visit Project
+Computer Vision
+2026
+SafeVision AI — Automated safety monitoring at construction sites
+It monitors the construction site in real time using existing video cameras, detects whether workers are adhering to saf...
+Visit Project
+Computer Vision
+2026
+SafeChild AI — Child Safety System
+Artificial intelligence detects dangerous objects around the child. When the child approaches sharp or cutting objects,...
+Visit Project
+Computer Vision
+2026
+NeuroScan AI
+Platform for detecting brain tumors using artificial intelligence
+Visit Project
+AI
+2026
+Artificial intelligence system for water quality determination.
+A platform for classifying water quality by analyzing water composition using artificial intelligence.
+Visit Project
+AI
+2026
+Intelligent Veterinary Diagnostics Based on Neutrosophic Sets
+A veterinary diagnostic system based on disease detection in cattle using artificial intelligence and neutrosophic analy...
+Visit Project
+

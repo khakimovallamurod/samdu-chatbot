@@ -1,0 +1,113 @@
+
+# Sharof Rashidov Nomidagi Samarqand Davlat Universiteti — RAG Chatbot Knowledge Base
+
+## HUJJAT HAQIDA
+Manba: Samarqand davlat universiteti pasporti 2024
+Tashkilot: Sharof Rashidov nomidagi Samarqand davlat universiteti
+Joylashuv: Samarqand, O‘zbekiston
+Hujjat turi: Universitet pasporti
+Yil: 2024
+
+# UNIVERSITET TARIXI
+
+Sharof Rashidov nomidagi Samarqand davlat universiteti O‘zbekistonning eng qadimiy va nufuzli oliy ta’lim muassasalaridan biridir.
+
+Universitet tarixi IX asrlarda shakllangan madrasalar va Mirzo Ulug‘bek tomonidan tashkil etilgan oliy madrasa faoliyatiga borib taqaladi.
+
+1420-yilda Mirzo Ulug‘bek tomonidan Samarqandda oliy madrasa tashkil etilgan va ushbu madrasa XX asrning 20-yillarigacha faoliyat yuritgan.
+
+1926-yil 10-avgust kuni O‘zbekiston Xalq Komissarlari Kengashining 103-bayonnomasi asosida Samarqandda oliy o‘quv yurti tashkil etish qarori qabul qilingan.
+
+1927-yil 22-yanvarda Oliy pedagogika instituti tantanali ravishda ochilgan.
+
+# UNIVERSITET RAHBARIYATI
+
+Rektor: Xalmurodov Rustam Ibragimovich
+Birinchi prorektor: Soleyev Ahmadjon
+O‘quv ishlari bo‘yicha prorektor: Umidullayev Shuhrat Ubaydullayevich
+
+# UNIVERSITET TUZILMASI
+
+Filiallar:
+- SamDU Kattaqo‘rg‘on filiali
+- SamDU Urgut filiali
+
+Institutlar:
+- Turkologiya ilmiy-tadqiqot instituti
+- Agrobiotexnologiyalar va oziq-ovqat xavfsizligi instituti
+- Muhandislik fizikasi instituti
+- Biokimyo instituti
+
+Fakultetlar:
+- Intellektual tizimlar va kompyuter texnologiyalari fakulteti
+- Geografiya va ekologiya fakulteti
+- Psixologiya va ijtimoiy-siyosiy fanlar fakulteti
+- Matematika fakulteti
+- Pedagogika ta’limi fakulteti
+- Tarix fakulteti
+- Filologiya fakulteti
+- Yuridik fakulteti
+
+# TA’LIM YO‘NALISHLARI
+
+Bakalavriat yo‘nalishlari soni: 70 ta
+Magistratura mutaxassisliklari soni: 47 ta
+
+# TALABALAR STATISTIKASI
+
+Jami talabalar soni: 20009 nafar
+Ayol talabalar soni: 10214 nafar
+
+# PROFESSOR-O‘QITUVCHILAR
+
+Jami professor-o‘qituvchilar: 866 nafar
+Fan doktori va professorlar: 104 nafar
+
+# ILMIY FAOLIYAT
+
+2023-yilda:
+- 1534 ta ilmiy maqola
+- 81 ta monografiya
+- 111 ta o‘quv qo‘llanma
+- 59 ta darslik chop etilgan
+
+# XALQARO HAMKORLIK
+
+Hamkor universitetlar bilan shartnomalar soni: 240 ta
+Hamkor davlatlar soni: 35 ta
+
+# SUN’IY INTELLEKT MARKAZLARI
+
+- Markaziy Osiyo sun’iy intellekt tadqiqot markazi
+- O‘zbekiston-Hindiston sun’iy intellekt va mashinali o‘qitish qo‘shma markazi
+
+# MODDIY-TEXNIK BAZA
+
+- Auditoriyalar: 499 ta
+- Laboratoriyalar: 65 ta
+- Internetga ulangan kompyuterlar: 1839 ta
+- Talabalar turar joylari: 6 ta
+
+# MOLIYAVIY MA’LUMOTLAR
+
+Ajratilgan budjet: 104946.0 mln so‘m
+Budjetdan tashqari mablag‘: 292450.0 mln so‘m
+
+
+SamDU, Samarqand davlat universiteti, Sharof Rashidov universiteti, fakultetlar, institutlar, magistratura, bakalavriat, talabalar soni, professorlar, xalqaro hamkorlik, sun’iy intellekt markazi.
+
+# FAQ
+
+Savol: SamDU rektori kim?
+Javob: Xalmurodov Rustam Ibragimovich.
+
+Savol: SamDU nechta fakultetga ega?
+Javob: 8 ta fakultet mavjud.
+
+Savol: SamDUda nechta talaba o‘qiydi?
+Javob: 20009 nafar talaba tahsil oladi.
+
+Savol: SamDUda sun’iy intellekt markazi bormi?
+Javob: Ha, mavjud.
+
+Manba: Samarqand davlat universiteti pasporti 2024.

@@ -1,1 +1,83 @@
-# samdu-chatbot
+# SamDU AI Yordamchi
+
+Sharof Rashidov nomidagi Samarqand davlat universiteti uchun matnli va ovozli AI yordamchi.
+Faqat SamDU haqidagi ma'lumotlar asosida javob beradi (`new-documents/` + www.samdu.uz + ai-lab.sampc.uz).
+
+## Tuzilma
+
+| Fayl | Vazifasi |
+|---|---|
+| `flaskapp.py` | Flask ilova: veb sahifa, `/api/docs`, CORS, xatolar |
+| `api.py` | REST API `/api/v1/*` (mobil va veb uchun) |
+| `rag.py` | Javob berish mantig'i: tezkor javoblar, kesh, generatsiya (oddiy va oqimli) |
+| `knowledge.py` | Gibrid qidiruv: vektor (ChromaDB) + kalit so'z (BM25), RRF |
+| `live.py` | Ovozli seans uchun bir martalik token |
+| `prompts.py` | Matnli va ovozli yordamchi ko'rsatmalari |
+| `ingest.py` | `new-documents/*.txt` → ChromaDB (bazani noldan quradi) |
+| `web_scraper.py` | samdu.uz va ai-lab.sampc.uz sahifalarini yig'ish |
+| `config.py` | Barcha sozlamalar (`.env` orqali o'zgartiriladi) |
+| `API.md` | Mobil ilova uchun API hujjati |
+
+## O'rnatish
+
+```bash
+pip install -r requirements.txt
+echo "GOOGLE_API_KEY=..." > .env
+python ingest.py            # bazani qurish (~30 s)
+python flaskapp.py          # http://localhost:8800
+```
+
+Bilim bazasini yangilash: `new-documents/` ga `.txt` qo'shing (yoki `python web_scraper.py`), so'ng
+`python ingest.py` va serverni qayta ishga tushiring. Yangi fayl uchun chiroyli manba nomini
+`config.py` dagi `SOURCE_TITLES` ga qo'shing.
+
+## Production
+
+```bash
+gunicorn -w 2 -k gthread --threads 16 --timeout 120 -b 127.0.0.1:8800 flaskapp:app
+```
+
+- `--preload` ishlatmang (har bir worker bazani o'zi ochadi).
+- nginx ortida: `.env` ga `TRUST_PROXY=true` qo'shing (aks holda barcha foydalanuvchilar bitta IP
+  hisoblanib, limitga tez tushadi) va oqim uchun buferlashni o'chiring:
+
+```nginx
+location / {
+    proxy_pass http://127.0.0.1:8800;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_buffering off;          # /api/v1/chat/stream uchun
+    proxy_read_timeout 120s;
+}
+```
+
+- Ovozli rejim brauzerda faqat **HTTPS** (yoki `localhost`) da ishlaydi — mikrofon talabi.
+
+## Server yuklamasini kamaytirish choralari
+
+- Ovozli audio serverdan o'tmaydi: server faqat token beradi, mijoz to'g'ridan-to'g'ri ulanadi.
+- Salomlashish, minnatdorchilik, "kimsan?" kabi savollarga model chaqirilmaydi.
+- Bazada mos ma'lumot bo'lmasa (begona mavzu) — model chaqirilmaydi.
+- Javoblar (30 daqiqa) va savol vektorlari (6 soat) xotirada keshlanadi.
+- Bir vaqtdagi generatsiyalar soni cheklangan (`MAX_CONCURRENT_GENERATIONS`), ortig'i navbatda kutadi.
+- IP bo'yicha limitlar; server suhbat tarixini saqlamaydi (stateless).
+
+## `.env` sozlamalari (ixtiyoriy)
+
+| O'zgaruvchi | Standart | Izoh |
+|---|---|---|
+| `CHAT_MODEL` | `gemini-3.5-flash` | Matnli javob modeli |
+| `CHAT_THINKING_LEVEL` | `minimal` | `minimal` eng tez; murakkab savollar uchun `low` |
+| `LIVE_MODEL` | `gemini-3.8-live` | Ovozli model |
+| `LIVE_VOICE` | `Kore` | Ovoz |
+| `MAX_VECTOR_DISTANCE` | `0.36` | Qidiruvda o'xshashlik chegarasi |
+| `RATE_LIMIT_CHAT` / `_SEARCH` / `_LIVE_TOKEN` | `20` / `60` / `6` | Daqiqasiga, har bir IP |
+| `MAX_CONCURRENT_GENERATIONS` | `16` | |
+| `ANSWER_CACHE_TTL` | `1800` | Soniya |
+| `TRUST_PROXY` | `false` | nginx ortida `true` |
+| `CORS_ORIGINS` | `*` | |
+| `ENABLE_API_DOCS` | `true` | `/api/docs` ni yopish uchun `false` |
+| `PORT` | `8800` | `python flaskapp.py` uchun |
+
+Qo'shimcha: veb sahifaga `/?q=Savol+matni` havolasi bilan kirilsa, savol avtomatik yuboriladi.

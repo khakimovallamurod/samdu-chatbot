@@ -1,0 +1,259 @@
+=== METADATA ===
+Nomi: Sharof Rashidov nomidagi Samarqand davlat universiteti Ustavi
+Tasdiqlangan: O‘zbekiston Respublikasi Oliy ta’lim, fan va innovatsiyalar vazirining 2023-yil 8-noyabrdagi 493-son buyrug‘i
+Tashkil etilgan: 1927-yil 22-yanvar
+Yuridik manzil: 140104, O‘zbekiston Respublikasi, Samarqand viloyati, Samarqand shahri, Universitet xiyoboni, 15
+Tili: o‘zbek, rus, ingliz, tojik
+INN: 201213338, 201122919
+Filiallar: Kattaqo‘rg‘on, Denov, Urgut
+Institutlari: Agrobiotexnalogiyalar va oziq-ovqat xavfsizligi instituti, Muhandislik fizikasi instituti, Inson resurslari va mahalla taraqqiyotini boshqarish instituti, Biokimyo instituti (yuridik shaxs maqomisiz)
+=== END METADATA ===
+
+=== BO‘LIM 1: UMUMIY QOIDALAR ===
+- Samarqand davlat universiteti O‘zbekiston Hukumatining qaroriga asosan 1927-yil 22-yanvarda tashkil etilgan.
+- O‘zbekiston Respublikasi Oliy ta’lim, fan va innovatsiyalar vazirligining tashkiliy tuzilmasiga kiradi.
+- Akademik, tashkiliy-boshqaruv va moliyaviy mustaqillikka ega (PQ-60, PQ-61-son qaror).
+- Kuzatuv kengashi tashkil etilgan.
+- 2022-yil 13-yanvarda atoqli davlat va jamoat arbobi Sharof Rashidov nomi berilgan (PQ-82-son qaror).
+- Universitet davlat oliy ta’lim muassasasi, bakalavriat, magistratura, qo‘shma ta’lim dasturlari, ilmiy-metodik va boshqa faoliyatlar amalga oshiradi.
+- Faoliyatida Konstitutsiya, “Ta’lim to‘g‘risida”gi Qonun, Prezident farmonlari, Vazirlar Mahkamasi qarorlari, vazirlik normativ hujjatlari va ushbu ustavga amal qiladi.
+- Yuridik shaxs, mustaqil balans, g‘azna hisob varaqlari, valyuta va boshqa hisob raqamlari, davlat gerbli muhrga ega.
+- Rasmiy nomlari:
+   * O‘zbek (kirill): Шароф Рашидов номидаги Самарқанд Давлат университети
+   * O‘zbek (lotin): Sharof Rashidov nomidagi Samarqand davlat universiteti
+   * Rus: Самарқандский Государственный университет имени Шарофа Рашидова
+   * Ingliz: Samarkand State University named after Sharof Rashidov
+- Xo‘jalik jamiyatini ta’sis etishi va ularning ustav kapitalida ishtirok etishi faqat Prezident va Vazirlar Mahkamasi hujjatlarida nazarda tutilgan hollarda mumkin.
+
+=== BO‘LIM 2: ASOSIY MAQSAD VA VAZIFALAR ===
+ASOSIY MAQSAD:
+- Raqobatbardosh, yuqori malakali, oliy ma’lumotli mutaxassislar va ilmiy-pedagog kadrlar tayyorlash.
+- Shaxsning intellektual, madaniy, ma’naviy-axloqiy ehtiyojlarini qondirish.
+- Vatan fidoyisi, halol mehnat qiluvchi, milliy va umuminsoniy qadriyatlarni hurmat qiluvchi shaxsni shakllantirish.
+- Ilm-fanni rivojlantirish, natijalarni ta’limda qo‘llash.
+- Aholi o‘rtasida bilim tarqatish, madaniy darajasini oshirish.
+
+AKADEMIK MUSTAQILLIK SOHASIDA:
+- O‘quv rejalari, dasturlar, malaka talablarini kasbiy standartlar asosida tasdiqlash.
+- Ta’lim tilini, shaklini belgilash.
+- Bakalavriat va magistraturada o‘qish muddatlarini belgilash.
+- Doktoranturada to‘lov-shartnoma narxini belgilash, budjetdan tashqari grantlar.
+- Doktorantlarga ilmiy rahbarlik qilish tartibini tasdiqlash.
+- Magistraturada sirtqi, masofaviy, kechki shakllarni joriy etish.
+- Akademik mobillik.
+- O‘z grifi bilan darsliklar nashr etish.
+- Ta’lim sifatini ichki nazorat qilish mexanizmlari.
+
+TASHKILIY-BOSHQARUVDAGI MUSTAQILLIK:
+- Budjetdan moliyalashtirilmaydigan tarkibiy tuzilmalar, tijorat va notijorat tashkilotlar tashkil etish.
+- Universitet tuzilmasini va shtat birliklari sonini belgilash.
+- Yangi ta’lim yo‘nalishlari va mutaxassisliklarni ochish, tugatish.
+- Professor-o‘qituvchilar va xodimlarni ishga qabul qilish, ozod etish, rotatsiya.
+- Xorijiy fuqarolarni to‘lov-shartnoma va masofaviy o‘qitish.
+
+ASOSIY VAZIFALAR:
+- Zamonaviy talablar, ilg‘or xalqaro tajriba asosida kadrlar tayyorlash.
+- Kredit-modul tizimi (European Credit Transfer and Accumulation System).
+- Ilmiy-tadqiqot ishlari, natijalarni amaliyotga tatbiq etish.
+- “HEMIS” platformasi yoki boshqa avtomatik boshqaruv tizimlari.
+- Korrupsiyaga murosasizlik tuyg‘usini shakllantirish.
+- Xorijiy olimlar va mutaxassislarni jalb etish.
+- Qo‘shma ta’lim dasturlari (double degree).
+
+=== BO‘LIM 3: TALABALAR, TINGLOVCHILAR, DOKTORANTLAR ===
+TALABALARNING HUQUQLARI:
+- Bilim olish.
+- Axborot-resurs markazidan bepul foydalanish.
+- Bepul maslahatlar.
+- Auditoriyalardan foydalanish.
+- Taklif va tanqidiy fikrlarni bildirish.
+- Ilmiy konferensiyalarda ishtirok etish, natijalarni nashr etish.
+- Jamoat birlashmalariga a’zo bo‘lish.
+- Akademik almashinuv.
+
+TALABALARNING MAJBURIYATLARI:
+- O‘quv reja va dasturlarni bajarish.
+- Ustav, ichki tartib-qoidalar, odob-axloq kodeksi, korrupsiyaga qarshi dasturga rioya qilish.
+- Universitet mol-mulkini asrash.
+- Vatanga xizmat qilishga tayyor bo‘lish.
+- Darslarni uzrli sababsiz qoldirmaslik.
+- Kiyinish madaniyati.
+- Alkogol va tamaki mahsulotlarini iste’mol qilmaslik.
+- O‘qishga kelmaganlik sababini 3 kundan kechiktirmasdan xabardor qilish.
+
+TAQIQLANADI:
+- Alkogol va tamaki tarqatish va iste’mol qilish.
+- Milliy, irqiy, diniy adovatni targ‘ib qilish.
+- Mol-mulkka zarar yetkazish.
+- Ma’muriyat ruxsatisiz chet elga chiqish.
+
+STIPENDIYALAR:
+- Davlat stipendiyasi, Alisher Navoiy, Mirzo Ulug‘bek nomidagi stipendiyalar.
+- Akademiklar Akbar Otaxo‘jayev, Vohid Abdullayev, G‘afur G‘ulom, Botirxon Valixo‘jayev, Yahyo G‘ulomov, Ibrohim Mo‘minov, Sa’di Sirojiddinov, Qodir Zokirov, Jo‘ra Saidov, Aziz Sanjar nomidagi stipendiyalar.
+
+AKADEMIK TA’TIL:
+- Harbiy xizmat, salomatlik, homiladorlik, bolalarni parvarish qilish, oila a’zosini parvarish qilish uchun beriladi.
+
+CHETLATISH SABABLARI:
+- O‘z xohishi.
+- Boshqa ta’lim muassasasiga ko‘chirish.
+- O‘quv intizomini buzish.
+- Bir semestrda 74 soatdan ortiq dars qoldirish.
+- To‘lov o‘z vaqtida amalga oshirilmaganligi.
+- Sud tomonidan ozodlikdan mahrum etilgan.
+- Kirish imtihonlarida tartibni buzganligi aniqlanganda (qayta tiklanmaydi).
+- Vafot etganligi.
+
+TINGLOVCHILAR:
+- Pedagog kadrlarni qayta tayyorlash va malaka oshirish markazida o‘qiyotgan shaxslar. Maqomi talabalar bilan tenglashtiriladi.
+
+DOKTORANTLAR:
+- Tayanch doktorantura (PhD, davlat budjeti, ishlab chiqarishdan ajralgan holda).
+- Doktorantura (DSc, davlat budjeti, ishlab chiqarishdan ajralgan).
+- Stajor-tadqiqotchilik.
+- Mustaqil izlanuvchilik (ishlab chiqarishdan ajralmagan holda).
+
+=== BO‘LIM 4: TA’LIM JARAYONI ===
+TA’LIM BOSQICHLARI:
+- Bakalavriat (kamida 3 yil, 180 yoki 240 kredit).
+- Magistratura (bakalavriat negizida, kamida 2 yil, 120 kredit).
+- Qo‘shma ta’lim dasturlari (double degree).
+
+O‘QISH SHAKLLARI:
+- Kunduzgi (ishlab chiqarishdan ajralgan).
+- Sirtqi, kechki (ishlab chiqarishdan ajralmagan).
+- Masofaviy.
+
+O‘QUV MASHG‘ULOTLARI TURLARI:
+- Ma’ruza, konsultatsiya, seminar, amaliy mashg‘ulot, laboratoriya ishi, yakka mashg‘ulot, nazorat ishi, kollokvium, mustaqil ish, amaliyot, kurs loyihasi, bakalavrlik bitiruv malakaviy ishi, magistrlik dissertatsiyasi.
+- Akademik soat: 80 daqiqa (tanaffussiz qo‘shma ma’ruza). Tanaffus kamida 10 daqiqa.
+
+TA’LIM TILLARI:
+- O‘zbek, rus, ingliz, tojik. Zaruratda boshqa xorijiy tillar (Kengash qarori bilan).
+
+O‘QUV YILI:
+- Ikki semestrga bo‘linadi.
+- Baholash: 5 baholik (2020/2021 gacha qabul qilinganlar) va kredit-modul tizimi (2020/2021 dan boshlab).
+
+YAKUNIY ATTESTATSIYA:
+- Bakalavr va magistr darajalari beriladi, davlat namunasidagi diplom topshiriladi.
+
+=== BO‘LIM 5: PROFESSOR-O‘QITUVCHILAR VA XODIMLAR ===
+LAVOZIMLAR:
+- Kafedra mudiri, professor, dotsent, katta o‘qituvchi, assistent, o‘qituvchi-stajor.
+
+HUQUQLAR:
+- Kengashlarga saylash va saylanish.
+- Universitet faoliyatini muhokama qilish.
+- Axborot-resurs markazi va ijtimoiy-maishiy xizmatlardan foydalanish.
+- O‘qitish uslub va vositalarini tanlash.
+- O‘rindoshlik asosida boshqa muassasalarda ishlash.
+- Xalqaro aloqalarni rivojlantirish.
+- Darslik, monografiya, patent, guvohnomalar olish.
+- Har yili haq to‘lanadigan mehnat ta’tili.
+
+MAJBURIYATLAR:
+- Qonunchilik, intizom, ustav, odob-axloq kodeksi, korrupsiyaga qarshi dasturga rioya qilish.
+- Xizmat vazifalarini vijdonan bajarish.
+- Malakani 3 yilda kamida 1 marta oshirish.
+- Kamida 1-2 xorijiy tilni bilish.
+- “Ustoz-shogird” tizimida ishtirok etish.
+- Talabalar bilimini xolisona baholash.
+- Kiyinish madaniyatiga rioya qilish.
+- Ilmiy salohiyat va pedagogik mahoratni oshirish.
+
+=== BO‘LIM 6: UNIVERSITET TARKIBI ===
+TUZILMA:
+- Kuzatuv kengashi, Universitet Kengashi.
+- Institutlar, fakultetlar, kafedralar.
+- Ilmiy va o‘quv laboratoriyalari, boshqarmalar, bo‘limlar, markazlar, muzeylar.
+- Fakultetlarni rektor tayinlagan dekan boshqaradi.
+- Institutlarni rektor tayinlagan direktor boshqaradi.
+- Kafedra mudiri tanlov asosida Kengash tomonidan saylanadi.
+- Universitet huzurida yuridik shaxs hisoblangan akademik litsey, texnikumlar, pedagog kadrlarni qayta tayyorlash va malaka oshirish mintaqaviy markazi faoliyat yuritadi.
+
+=== BO‘LIM 7: UNIVERSITETNI BOSHQARISH ===
+REKTOR:
+- Vazir tavsiyasiga ko‘ra, Prezident Administratsiyasi bilan kelishilgan holda Vazirlar Mahkamasi tomonidan tayinlanadi va ozod etiladi.
+- Yakka rahbarlik va Kengash orqali jamoatchilik boshqaruvini uyg‘unlashtirish.
+- Buyruq va farmoyishlar chiqaradi.
+- Dekanlar, direktorlar, bo‘lim boshiqlari, bosh hisobchini tayinlaydi va ozod qiladi.
+- Prorektorlarga nomzodlarni tavsiya etadi.
+- Mehnat shartnomalari tuzadi.
+- Shtat birliklari va lavozim maoshlarini tasdiqlaydi.
+- Rektorga haq to‘lanadigan boshqa rahbarlik lavozimida o‘rindoshlik qilish taqiqlanadi.
+
+UNIVERSITET KENGASHI:
+- Tarkibi: rektor (rais), prorektorlar, dekanlar, direktorlar, kafedra mudirlari, bo‘lim boshiqlari, xodimlar, kasaba uyushmasi vakillari.
+- Boshqa a’zolari yashirin ovoz bilan saylanadi.
+
+ILMIY KENGASHLAR:
+- PhD va DSc ilmiy darajalarini beruvchi, OAK tomonidan tasdiqlangan ilmiy kengashlar tashkil etilishi mumkin.
+
+=== BO‘LIM 8: JAMOAT TASHKILOTLARI ===
+JAMOATCHILIK KENGASHI:
+- Talabalar, ota-onalar, Yoshlar ittifoqi faollari, kadrlar buyurtmachilari, professor-o‘qituvchilar, fuqarolik jamiyati institutlari vakillaridan iborat.
+- Vazifalari: ta’lim sifati monitoringi, professor-o‘qituvchilar nomzodlari bo‘yicha tavsiyalar, talabalar murojaatlarini ko‘rib chiqish, ijtimoiy so‘rovlar, ta’lim jarayonini takomillashtirish takliflari.
+
+KASABA UYUSHMASI:
+- Professor-o‘qituvchilar va xodimlarning mehnat huquqi va manfaatlarini himoya qiladi.
+
+=== BO‘LIM 9: MOLIYA-XO‘JALIK FAOLIYATI VA MODDIY-TEXNIK BAZA ===
+MOLIYALASHTIRISH MANBALARI:
+- Davlat budjeti.
+- To‘lov-shartnoma asosidagi o‘qitish (bakalavriat, magistratura, oliy ta’limdan keyingi ta’lim).
+- Xorijiy fuqarolarni o‘qitishdan valyuta tushumlari.
+- Budjetdan tashqari rivojlantirish jamg‘armasi.
+- Grantlar (davlat ilmiy-texnikaviy dasturlari, xalqaro moliya tashkilotlari).
+- Pullik kurslar va boshqa xizmatlar.
+- Xayriya ehsonlari, maqsadli badallar.
+- Ilmiy va innovatsion ishlanmalarni tijoratlashtirish, mol-mulkni ijaraga berish.
+- Qonunchilik bilan taqiqlanmagan boshqa manbalar.
+
+MULK:
+- Operativ boshqaruv huquqida binolar, inshootlar, asbob-uskunalar.
+- Yer uchastkalari muddatsiz tekin foydalanishga berilgan.
+- Davlat-xususiy sheriklik loyihalari to‘g‘risidagi ma’lumotlar “Davlat mulki” axborot tizimiga 10 kun ichida kiritiladi.
+- Mol-mulk faqat Vazirlar Mahkamasining qarori bilan garovga qo‘yilishi mumkin.
+
+MEHNAT HAQI:
+- Lavozim maoshlari Yagona tarif setkasi asosida belgilanadi.
+- Moddiy rag‘batlantirish fondi doirasida ustamalar va qo‘shimchalar.
+
+ASOSIY VOSITALARNI SOTISH:
+- Xizmat muddati tugagach (to‘liq yaroqsiz).
+- Jismoniy eskirish, avariya, tabiiy ofat.
+- Ma’naviy eskirish.
+- Qurilish, rekonstruksiya munosabati bilan bo‘shab qolgan.
+
+=== BO‘LIM 10: XALQARO HAMKORLIK ===
+HUQUQLAR:
+- Xalqaro nodavlat notijorat tashkilotlarga a’zo bo‘lish.
+- Chet el ta’lim va ilmiy markazlari bilan shartnomalar (memorandumlar) tuzish.
+- Xorijiy professor-o‘qituvchilar va olimlarni jalb etish.
+- Qo‘shma fakultetlar, qo‘shma ta’lim dasturlari, markazlar tashkil etish.
+- Professor-o‘qituvchilar, xodimlar, doktorantlarni xorijga malaka oshirish va stajirovkaga yuborish.
+- Talabalarni xorijga stajirovka, amaliyot, konferensiyalarga yuborish.
+- Ikki tomonlama almashinuv dasturlari.
+- Xorijiy fuqarolarni o‘qishga qabul qilish.
+
+XIZMAT SAFARLARI:
+- Rektor va prorektorlarning xorijiy safarlari Oliy ta’lim, fan va innovatsiyalar vazirligini xabardor qilgan holda amalga oshiriladi.
+- Safar ma’lumotlari va hisobot universitet veb-saytiga joylashtiriladi.
+
+=== BO‘LIM 11: YAKUNIY QOIDALAR ===
+JAVOBGARLIK HOLATLARI:
+- Ta’lim dasturlari hajmini to‘liq bajarmaganlik.
+- Ta’lim oluvchilar va xodimlarning hayoti va sog‘ligiga zarar yetkazilganlik.
+- Huquq va erkinliklarning buzilganligi.
+- Qonunchilikda nazarda tutilgan boshqa vazifalarni bajarmaganlik.
+
+QAYTA TASHKIL ETISH VA TUGATISH:
+- O‘zbekiston Respublikasi qonunchiligiga muvofiq.
+
+MAXFIYLIK HIMOYASI:
+- Majburiy ijro byurosi tomonidan operativ boshqaruvdagi davlat ko‘chmas mulki xatlanishi va majburiy realizatsiya qilinishi mumkin emas.
+
+USTAVNING KUCHGA KIRISHI:
+- Oliy ta’lim, fan va innovatsiyalar vazirligi tomonidan tasdiqlanib, davlat ro‘yxatidan o‘tkazilgandan so‘ng.
+- O‘zgartirish va qo‘shimchalar vazirning buyrug‘i bilan.

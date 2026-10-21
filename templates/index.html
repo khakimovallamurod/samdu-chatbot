@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+  <meta name="description" content="Sharof Rashidov nomidagi Samarqand davlat universiteti rasmiy AI yordamchisi" />
+  <title>SamDU AI Yordamchi</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/samdulogo.png') }}" />
+
+  <script>
+    // Mavzu: saqlangan tanlov yoki tizim sozlamasi (chaqnashsiz)
+    (function () {
+      let theme = null;
+      try { theme = localStorage.getItem("samdu-theme"); } catch (e) {}
+      if (theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+    })();
+  </script>
+  <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Inter"', "ui-sans-serif", "system-ui", "sans-serif"] },
+          boxShadow: {
+            composer: "0 0 0 1px rgba(0,0,0,.04), 0 8px 30px -12px rgba(0,0,0,.18)",
+            card: "0 1px 2px rgba(0,0,0,.04)",
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+</head>
+
+<body class="h-full bg-white font-sans text-zinc-800 antialiased dark:bg-zinc-950 dark:text-zinc-200">
+  <div class="flex h-[100dvh] overflow-hidden">
+
+    <!-- ============ SIDEBAR ============ -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-[272px] -translate-x-full flex-col border-r border-zinc-200 bg-zinc-50 transition-[transform,background-color] duration-300 dark:border-zinc-800/80 dark:bg-zinc-900 lg:static lg:translate-x-0">
+      <div class="flex h-16 items-center gap-3 px-4">
+        <img src="{{ url_for('static', filename='images/samdulogo.png') }}" alt="SamDU" class="h-9 w-9 rounded-full bg-white ring-1 ring-zinc-200 dark:ring-zinc-700" />
+        <div class="min-w-0 leading-tight">
+          <p class="text-[15px] font-semibold tracking-tight text-zinc-900 dark:text-white">SamDU</p>
+          <p class="truncate text-xs text-zinc-500 dark:text-zinc-400">AI yordamchi</p>
+        </div>
+        <button id="closeSidebar" class="icon-btn ml-auto lg:hidden" aria-label="Menyuni yopish">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" d="M6 18 18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="px-3">
+        <button id="newChatBtn" class="group flex w-full items-center gap-2.5 rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-sm font-medium text-zinc-800 shadow-card transition hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700/80 dark:bg-zinc-800/60 dark:text-zinc-100 dark:hover:bg-zinc-800">
+          <span class="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-600 text-white dark:bg-emerald-500 dark:text-zinc-950">
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.6"><path stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>
+          </span>
+          Yangi suhbat
+          <kbd class="ml-auto hidden rounded border border-zinc-200 px-1.5 text-[10px] font-medium text-zinc-400 dark:border-zinc-700 sm:inline">Ctrl K</kbd>
+        </button>
+      </div>
+
+      <nav class="thin-scroll mt-6 flex-1 overflow-y-auto px-3">
+        <p class="px-2 text-[11px] font-semibold uppercase tracking-[.08em] text-zinc-400 dark:text-zinc-500">Mavzular</p>
+        <ul class="mt-2 space-y-0.5">
+          {% for s in suggestions %}
+          <li>
+            <button class="group flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left text-sm text-zinc-600 transition hover:bg-zinc-200/60 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100" data-question="{{ s.question }}">
+              <span class="text-zinc-400 transition group-hover:text-emerald-600 dark:text-zinc-500 dark:group-hover:text-emerald-400">{{ s.icon|safe }}</span>
+              <span class="truncate">{{ s.title }}</span>
+            </button>
+          </li>
+          {% endfor %}
+        </ul>
+      </nav>
+
+      <div class="space-y-3 border-t border-zinc-200 p-3 dark:border-zinc-800">
+        <div class="space-y-1 px-2 text-xs text-zinc-500 dark:text-zinc-400">
+          <a href="tel:+998662403840" class="flex items-center gap-2 py-0.5 transition hover:text-emerald-600 dark:hover:text-emerald-400">
+            <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106a1.125 1.125 0 0 0-1.173.417l-.97 1.293a1.125 1.125 0 0 1-1.21.38 12.035 12.035 0 0 1-7.143-7.143 1.125 1.125 0 0 1 .38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"/></svg>
+            +998 66 240 38 40
+          </a>
+          <a href="https://www.samdu.uz" target="_blank" rel="noopener" class="flex items-center gap-2 py-0.5 transition hover:text-emerald-600 dark:hover:text-emerald-400">
+            <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3M3.6 9h16.8M3.6 15h16.8"/></svg>
+            www.samdu.uz
+          </a>
+          <a href="https://t.me/SamDUeduuz" target="_blank" rel="noopener" class="flex items-center gap-2 py-0.5 transition hover:text-emerald-600 dark:hover:text-emerald-400">
+            <svg class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
+            @SamDUeduuz
+          </a>
+        </div>
+        <!-- Mavzu almashtirgich -->
+        <div class="grid grid-cols-2 gap-1 rounded-xl bg-zinc-200/70 p-1 text-xs font-medium dark:bg-zinc-800">
+          <button class="theme-set flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-zinc-500 transition dark:text-zinc-400" data-theme="light">
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/></svg>
+            Yorug'
+          </button>
+          <button class="theme-set flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-zinc-500 transition dark:text-zinc-400" data-theme="dark">
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>
+            Qorong'i
+          </button>
+        </div>
+      </div>
+    </aside>
+    <div id="sidebarBackdrop" class="fixed inset-0 z-30 hidden bg-black/40 backdrop-blur-[2px] lg:hidden"></div>
+
+    <!-- ============ MAIN ============ -->
+    <main class="relative flex min-w-0 flex-1 flex-col">
+      <header class="flex h-16 shrink-0 items-center gap-3 px-3 sm:px-5">
+        <button id="openSidebar" class="icon-btn lg:hidden" aria-label="Menyu">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" d="M3.75 7h16.5M3.75 12h16.5M3.75 17h10.5"/></svg>
+        </button>
+        <div class="min-w-0">
+          <h1 class="truncate text-[15px] font-semibold tracking-tight text-zinc-900 dark:text-white">Samarqand davlat universiteti</h1>
+          <p class="flex items-center gap-1.5 whitespace-nowrap text-xs text-zinc-500 dark:text-zinc-400">
+            <span class="relative flex h-1.5 w-1.5"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60"></span><span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500"></span></span>
+            Rasmiy AI yordamchi
+          </p>
+        </div>
+        <div class="ml-auto flex items-center gap-1">
+          <button class="theme-toggle icon-btn" title="Mavzuni almashtirish" aria-label="Mavzuni almashtirish">
+            <svg class="h-[18px] w-[18px] dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>
+            <svg class="hidden h-[18px] w-[18px] dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/></svg>
+          </button>
+          <button id="clearBtn" class="icon-btn" title="Suhbatni tozalash" aria-label="Suhbatni tozalash">
+            <svg class="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Chat -->
+      <div id="chatArea" class="thin-scroll flex-1 overflow-y-auto">
+        <section id="welcome" class="mx-auto flex min-h-full w-full max-w-3xl flex-col items-center justify-center px-4 pb-10 pt-4 text-center">
+          <div class="hero-logo relative">
+            <img src="{{ url_for('static', filename='images/samdulogo.png') }}" alt="SamDU" class="relative h-20 w-20 rounded-full bg-white ring-1 ring-zinc-200 dark:ring-zinc-700" />
+          </div>
+          <h2 class="mt-6 text-[28px] font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">Qanday yordam bera olaman?</h2>
+          <p class="mt-3 max-w-lg text-[15px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+            Qabul, fakultetlar, rahbariyat va universitet tartib-qoidalari haqida yozing yoki <button type="button" class="voice-link font-medium text-emerald-600 underline decoration-emerald-600/30 underline-offset-4 hover:decoration-emerald-600 dark:text-emerald-400">ovozli so'rang</button>.
+          </p>
+          <div class="mt-10 grid w-full grid-cols-1 gap-2.5 sm:grid-cols-2">
+            {% for s in suggestions[:4] %}
+            <button class="group flex items-center gap-3 rounded-2xl border border-zinc-200 bg-white px-4 py-3.5 text-left transition hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-zinc-700 dark:hover:bg-zinc-900" data-question="{{ s.question }}">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">{{ s.icon|safe }}</span>
+              <span class="min-w-0 flex-1">
+                <span class="block text-sm font-medium text-zinc-900 dark:text-zinc-100">{{ s.title }}</span>
+                <span class="mt-0.5 block truncate text-[13px] text-zinc-500 dark:text-zinc-400">{{ s.question }}</span>
+              </span>
+              <svg class="h-4 w-4 shrink-0 -translate-x-1 text-zinc-300 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12l-7.5 7.5M21 12H3"/></svg>
+            </button>
+            {% endfor %}
+          </div>
+        </section>
+        <div id="messages" class="mx-auto hidden w-full max-w-3xl space-y-8 px-4 pb-8 pt-4 sm:px-6"></div>
+      </div>
+
+      <!-- Composer -->
+      <footer class="shrink-0 px-3 pb-[max(env(safe-area-inset-bottom),12px)] sm:px-6">
+        <form id="composer" class="mx-auto flex w-full max-w-3xl items-end gap-2 rounded-[26px] border border-zinc-200 bg-white p-2 pl-4 shadow-composer transition focus-within:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:focus-within:border-zinc-700">
+          <textarea id="input" rows="1" maxlength="1000" placeholder="SamDU haqida savol bering..." class="max-h-48 min-h-[40px] flex-1 resize-none bg-transparent py-2 text-[15px] leading-6 text-zinc-900 placeholder:text-zinc-400 focus:outline-none dark:text-zinc-100 dark:placeholder:text-zinc-500"></textarea>
+          <button type="button" id="micBtn" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white" title="Ovozli suhbat" aria-label="Ovozli suhbat">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z"/></svg>
+          </button>
+          <!-- Matn bo'lmasa: ovozli rejim; matn bo'lsa: yuborish -->
+          <button type="submit" id="sendBtn" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-white transition hover:bg-zinc-700 disabled:cursor-wait disabled:opacity-40 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200" aria-label="Yuborish">
+            <svg class="icon-voice h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="9.5" width="2.2" height="5" rx="1.1"/><rect x="7.4" y="6.5" width="2.2" height="11" rx="1.1"/><rect x="11.8" y="3.5" width="2.2" height="17" rx="1.1"/><rect x="16.2" y="7.5" width="2.2" height="9" rx="1.1"/><rect x="20.2" y="10" width="2" height="4" rx="1"/></svg>
+            <svg class="icon-send hidden h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5m0 0-6 6m6-6 6 6"/></svg>
+          </button>
+        </form>
+        <p class="mx-auto mt-2 max-w-3xl text-center text-[11px] text-zinc-400 dark:text-zinc-500">© 2026 SamDU Sun'iy intellekt laboratoriyasi · Muhim ma'lumotlarni rasmiy manbalardan tekshiring</p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- ============ VOICE MODE ============ -->
+  <div id="voiceOverlay" class="fixed inset-0 z-50 hidden flex-col items-center bg-white px-6 pb-[max(env(safe-area-inset-bottom),28px)] pt-5 dark:bg-zinc-950" role="dialog" aria-modal="true" aria-label="Ovozli suhbat">
+    <div class="flex w-full max-w-3xl items-center gap-3">
+      <img src="{{ url_for('static', filename='images/samdulogo.png') }}" alt="" class="h-8 w-8 rounded-full bg-white ring-1 ring-zinc-200 dark:ring-zinc-700" />
+      <p class="text-sm font-semibold text-zinc-900 dark:text-white">SamDU ovozli yordamchi</p>
+      <span class="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">Live</span>
+    </div>
+
+    <div class="flex w-full flex-1 flex-col items-center justify-center">
+      <div id="orb" class="voice-orb" data-state="connecting">
+        <svg class="orb-rings" viewBox="0 0 300 300" aria-hidden="true">
+          <circle class="ring r-base" cx="150" cy="150" r="146" />
+          <circle class="ring r-ticks" cx="150" cy="150" r="140" />
+          <circle class="ring r-arcs" cx="150" cy="150" r="131" />
+          <circle class="ring r-arcs2" cx="150" cy="150" r="123" />
+        </svg>
+        <div class="orb-glow"></div>
+        <div class="orb-sphere">
+          <div class="orb-cloud c1"></div>
+          <div class="orb-cloud c2"></div>
+          <div class="orb-cloud c3"></div>
+          <div class="orb-shine"></div>
+        </div>
+      </div>
+
+      <p id="voiceStatus" class="mt-10 text-sm font-medium text-zinc-500 dark:text-zinc-400">Ulanmoqda...</p>
+      <div class="mt-4 min-h-[6rem] w-full max-w-xl text-center">
+        <p id="voiceUserText" class="text-sm text-zinc-400 dark:text-zinc-500"></p>
+        <p id="voiceBotText" class="mt-2 text-lg leading-relaxed text-zinc-800 dark:text-zinc-100"></p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <button id="voiceMute" class="voice-ctrl" aria-label="Mikrofonni o'chirish" title="Mikrofon">
+        <svg class="mic-on h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z"/></svg>
+        <svg class="mic-off hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18M9 9v3.75a3 3 0 0 0 5.12 2.12M15 9.34V4.5a3 3 0 0 0-5.94-.6M18 11.25v1.5a5.98 5.98 0 0 1-1.13 3.5M6 11.25v1.5a6 6 0 0 0 9.4 4.94M12 18.75v3.75m-3.75 0h7.5"/></svg>
+      </button>
+      <button id="voiceEnd" class="voice-ctrl voice-end" aria-label="Suhbatni tugatish" title="Tugatish">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" d="M6 18 18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="toast" class="pointer-events-none fixed left-1/2 top-4 z-[60] hidden -translate-x-1/2 rounded-xl bg-zinc-900 px-4 py-2.5 text-sm text-white shadow-lg dark:bg-white dark:text-zinc-900"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <script src="{{ url_for('static', filename='js/voice.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# --- Asosiy (server ishlashi uchun majburiy) ---
+Flask>=3.1,<4                # veb server va REST API
+google-genai>=2.18,<3        # matnli javob, embedding, ovozli seans tokeni
+chromadb>=1.5,<2             # vektor baza (bilim bazasi)
+python-dotenv>=1.0           # .env dan API kalitni o'qish
+
+# --- Production server (Linux) ---
+gunicorn>=23.0
+
+# --- Ixtiyoriy: faqat web_scraper.py uchun (saytlardan ma'lumot yig'ish) ---
+requests>=2.31
+beautifulsoup4>=4.12

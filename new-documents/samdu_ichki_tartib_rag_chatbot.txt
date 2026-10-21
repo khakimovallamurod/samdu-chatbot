@@ -1,0 +1,380 @@
+
+# SAMDU ICHKI TARTIB-QOIDALARI
+# RAG CHATBOT KNOWLEDGE BASE
+# Source: Sharof Rashidov nomidagi Samarqand davlat universiteti Ichki tartib-qoidalari 2023
+
+==================================================
+HUJJAT HAQIDA
+==================================================
+
+Tashkilot: Sharof Rashidov nomidagi Samarqand davlat universiteti
+Hujjat turi: Ichki tartib-qoidalari
+Tasdiqlangan sana: 2023-yil 9-iyun
+Tasdiqlovchi organ: Universitet Kengashi
+Asosiy maqsad:
+- Universitet ichki tartibini belgilash
+- Xodim va talabalar majburiyatlarini tartibga solish
+- Mehnat va o‘quv intizomini ta’minlash
+- Huquq va javobgarliklarni belgilash
+
+==================================================
+UMUMIY QOIDALAR
+==================================================
+
+Ichki tartib-qoidalari quyidagi hujjatlar asosida ishlab chiqilgan:
+- O‘zbekiston Respublikasi Ta’lim to‘g‘risidagi Qonuni
+- O‘zbekiston Respublikasi Mehnat kodeksi
+- Prezident qarorlari va farmonlari
+- Vazirlar Mahkamasi qarorlari
+- Oliy ta’lim vazirligi normativ hujjatlari
+
+Mazkur qoidalar:
+- Xodimlar
+- Talabalar
+- Magistrantlar
+- Doktorantlar
+- Mustaqil izlanuvchilar
+uchun majburiy hisoblanadi.
+
+==================================================
+ISH BERUVCHINING MAJBURIYATLARI
+==================================================
+
+Universitet rahbariyati:
+- Mehnat sharoitlarini yaratishi kerak
+- Xodimlarga o‘z vaqtida ish haqi to‘lashi kerak
+- Mehnat muhofazasini ta’minlashi kerak
+- Xodim murojaatlarini ko‘rib chiqishi kerak
+- Dam olish huquqini ta’minlashi kerak
+- Korrupsion holatlar haqida huquqni muhofaza qilish organlariga xabar berishi kerak
+
+==================================================
+XODIMLARNING MAJBURIYATLARI
+==================================================
+
+Xodimlar:
+- Universitet ustavi va odob-axloq kodeksiga amal qilishi kerak
+- Mehnat intizomiga rioya qilishi kerak
+- Ishga kechikmasligi kerak
+- Universitet mulkini asrashi kerak
+- Xushmuomalalik bilan muomala qilishi kerak
+- Korrupsiyaga yo‘l qo‘ymasligi kerak
+
+==================================================
+KIYINISH MADANIYATI
+==================================================
+
+Erkak xodimlar:
+- Rasmiy kiyinish uslubiga amal qilishi kerak
+- Yorqin rangli va gulli kiyimlar mumkin emas
+- Jinsi, futbolka, shortik mumkin emas
+- Soqol va haddan tashqari uzun soch mumkin emas
+
+Ayol xodimlar:
+- Kamtarona kiyinishlari kerak
+- Ochiq va kalta kiyim mumkin emas
+- Me’yoridan ortiq taqinchoq va parfyum mumkin emas
+
+==================================================
+MEHNAT INTIZOMI
+==================================================
+
+Mehnat intizomi:
+- Universitet ustavi
+- Ichki tartib
+- Texnika xavfsizligi
+- Mehnat muhofazasi
+asosida tashkil qilinadi.
+
+==================================================
+RAG‘BATLANTIRISH
+==================================================
+
+Xodimlarga quyidagi rag‘batlar berilishi mumkin:
+- Tashakkurnoma
+- Faxriy yorliq
+- Pul mukofoti
+- Esdalik sovg‘alari
+- Idoraviy mukofotlar
+
+==================================================
+INTIZOMIY JAZOLAR
+==================================================
+
+Quyidagilar mehnat intizomini buzish hisoblanadi:
+- Ishga kelmaslik
+- Surunkali kechikish
+- Alkogol yoki narkotik ta’sirida kelish
+- Universitet mulkiga zarar yetkazish
+- Xizmat ma’lumotlarini oshkor qilish
+- Mansab vakolatini suiiste’mol qilish
+
+==================================================
+ISHDAN BO‘SHATISH HOLATLARI
+==================================================
+
+Quyidagi holatlarda mehnat shartnomasi bekor qilinishi mumkin:
+- 3 soatdan ortiq uzrsiz ishda bo‘lmaslik
+- Bir oyda 3 martadan ortiq kechikish
+- Alkogol yoki giyohvand modda iste’mol qilib kelish
+- Universitet mol-mulkini o‘g‘irlash
+- Axloq qoidalarini buzish
+- Texnika xavfsizligini qo‘pol buzish
+- Universitet sirlarini oshkor qilish
+
+==================================================
+ISH VAQTI
+==================================================
+
+Ish haftasi:
+- 6 kunlik
+
+Haftalik ish vaqti:
+- 40 soat
+
+Dushanba-juma:
+- 08:00 dan 16:00 gacha
+
+Tushlik:
+- 12:00 dan 13:00 gacha
+
+Shanba:
+- 08:00 dan 14:00 gacha
+
+Yakshanba:
+- Dam olish kuni
+
+==================================================
+QISQARTIRILGAN ISH VAQTI
+==================================================
+
+Quyidagilar uchun qisqartirilgan ish vaqti mavjud:
+- 15-16 yosh: 24 soat
+- 16-18 yosh: 36 soat
+- Nogironligi bor xodimlar: 36 soat
+- 3 yoshgacha bolasi bor ota-onalar: 35 soat
+
+==================================================
+TA’TIL QOIDALARI
+==================================================
+
+Yillik ta’til:
+- Kamida 21 kalendar kun
+
+Ta’til:
+- Jadval asosida beriladi
+- Xodim 15 kun oldin ogohlantiriladi
+
+Quyidagilar muddatidan oldin ta’til olishi mumkin:
+- Homilador ayollar
+- 18 yoshgacha bo‘lganlar
+- Nogironligi bor xodimlar
+- Urush qatnashchilari
+
+==================================================
+MEHNAT NIZOLARI
+==================================================
+
+Xodim:
+- Ish beruvchiga yozma yoki og‘zaki murojaat qilishi mumkin
+- Kasaba uyushmasi orqali murojaat qilishi mumkin
+- Sudga murojaat qilishi mumkin
+
+==================================================
+TALABALAR HUQUQLARI
+==================================================
+
+Talabalar:
+- Sifatli ta’lim olish
+- Kutubxona va elektron resurslardan foydalanish
+- Bepul maslahat olish
+- Ilmiy konferensiyalarda qatnashish
+- Universitet tadbirlarida qatnashish
+huquqiga ega.
+
+==================================================
+TALABALAR MAJBURIYATLARI
+==================================================
+
+Talabalar:
+- Dars qoldirmasligi kerak
+- Darsga kech qolmasligi kerak
+- Telefon ishlatmasligi kerak
+- Shpargalka ishlatmasligi kerak
+- O‘qituvchilarga hurmat bilan muomala qilishi kerak
+- Universitet mulkini asrashi kerak
+- Sanitariya qoidalariga amal qilishi kerak
+
+==================================================
+TALABALAR UCHUN TAQIQLAR
+==================================================
+
+Talabalarga taqiqlanadi:
+- Tamaki, nos, elektron sigaret chekish
+- Spirtli ichimlik ichish
+- Giyohvand moddalar iste’mol qilish
+- Diniy targ‘ibot materiallarini tarqatish
+- Pornografik material tarqatish
+- Qimor o‘ynash
+- Shovqin qilish
+- Darsga xalaqit berish
+
+==================================================
+TELEFON VA ALOQA QOIDALARI
+==================================================
+
+Universitetga telefon olib kirish mumkin.
+
+Lekin:
+- Telefon ovozsiz rejimda bo‘lishi kerak
+- Dars paytida o‘chirib qo‘yilishi kerak
+- Ruxsatsiz foydalanish mumkin emas
+
+==================================================
+KIYINISH QOIDALARI TALABALAR UCHUN
+==================================================
+
+Talabalar:
+- Pokiza va oddiy kiyinishlari kerak
+- G‘ayrioddiy soch turmagi mumkin emas
+- Mini yubka, shortik, mayka mumkin emas
+- Diniy ibodat kiyimi mumkin emas
+
+==================================================
+DARS JARAYONI
+==================================================
+
+Akademik soat:
+- 40 minut
+
+Qo‘shma dars:
+- 80 minut
+
+Juftliklar orasida:
+- 10 minut tanaffus
+
+Tushlik:
+- 40 minutdan oshmasligi kerak
+
+==================================================
+GURUH SARDORI VAZIFALARI
+==================================================
+
+Guruh sardori:
+- Davomatni nazorat qiladi
+- Kechikkanlarni dekanatga bildiradi
+- Dars jadvalidagi o‘zgarishlarni yetkazadi
+- Guruhdagi tartibni nazorat qiladi
+
+==================================================
+RAG‘BATLANTIRISH TALABALAR UCHUN
+==================================================
+
+Talabalar quyidagicha rag‘batlantiriladi:
+- Tashakkurnoma
+- Stipendiya qo‘shimchasi
+- Mukofot
+- Faxriy yorliq
+- Sovg‘alar
+
+==================================================
+INTIZOMIY JAZOLAR TALABALAR UCHUN
+==================================================
+
+Talabalarga:
+- Ogohlantirish
+- Hayfsan
+- Talabalar safidan chetlatish
+qo‘llanishi mumkin.
+
+==================================================
+DAVOMAT BO‘YICHA JAZOLAR
+==================================================
+
+18 soat dars qoldirsa:
+- Ogohlantirish
+
+32 soat dars qoldirsa:
+- Hayfsan
+
+74 soat dars qoldirsa:
+- Talabalar safidan chetlatiladi
+
+==================================================
+TALABALAR CHETLATILISH HOLATLARI
+==================================================
+
+Talaba quyidagi holatlarda chetlashtiriladi:
+- To‘lov qilmasa
+- Soxta hujjat ishlatsa
+- Imtihonda boshqa odam kirsa
+- Korrupsion holat qilsa
+- O‘qituvchiga qo‘l ko‘tarsa
+- Yolg‘on ma’lumot tarqatsa
+- Universitet bilan aloqani uzsa
+
+==================================================
+YOTOQXONA QOIDALARI
+==================================================
+
+22:00 dan 06:00 gacha:
+- Shovqin qilish mumkin emas
+
+Talabalar:
+- Yotoqxona qoidalariga amal qilishi kerak
+- To‘lovlarni vaqtida to‘lashi kerak
+
+==================================================
+MUHIM FAQ
+==================================================
+
+Savol: SamDUda dars paytida telefon ishlatish mumkinmi?
+Javob: Yo‘q, faqat ruxsat bilan mumkin.
+
+Savol: Universitetda elektron sigaret mumkinmi?
+Javob: Yo‘q, qat’iyan taqiqlanadi.
+
+Savol: Talaba necha soat dars qoldirsa chetlashtiriladi?
+Javob: 74 soat.
+
+Savol: Akademik soat necha minut?
+Javob: 40 minut.
+
+Savol: Universitet ish vaqti qachon?
+Javob: 08:00 dan 16:00 gacha.
+
+Savol: Talabaga qanday intizomiy jazo beriladi?
+Javob: Ogohlantirish, hayfsan yoki chetlatish.
+
+Savol: Universitetda qimor o‘ynash mumkinmi?
+Javob: Yo‘q, taqiqlanadi.
+
+Savol: Talabalar diniy kiyimda yurishi mumkinmi?
+Javob: Yo‘q, mumkin emas.
+
+==================================================
+CHATBOT SEARCH KEYWORDS
+==================================================
+
+SamDU ichki tartib
+SamDU dars qoidalari
+SamDU davomat
+SamDU telefon qoidasi
+SamDU kiyinish qoidalari
+SamDU talabalar qoidasi
+SamDU ish vaqti
+SamDU ta’til
+SamDU intizomiy jazo
+SamDU hayfsan
+SamDU chetlashtirish
+SamDU yotoqxona qoidalari
+SamDU mehnat intizomi
+SamDU universitet qoidalari
+
+==================================================
+SOURCE
+==================================================
+
+Sharof Rashidov nomidagi Samarqand davlat universiteti
+Ichki tartib-qoidalari
+2023
