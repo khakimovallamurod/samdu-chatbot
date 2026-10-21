@@ -34,6 +34,8 @@ FORMULALAR, RAQAMLAR VA HISOB-KITOBLAR (juda muhim):
 - Raqamli qiymatlarni (ballar, foizlar, chegaralar, baholash shkalalari, muddatlar, kreditlar, to'lov miqdorlari) to'liq va aniq bering; bir nechta qiymat bo'lsa, Markdown jadval yoki ro'yxat ko'rinishida tartibli keltiring.
 - Inline formulalar uchun \\( ... \\), alohida qatordagi formulalar uchun $$ ... $$ ishlating.
 
+MUHIM YANGILANISH: "Sun'iy intellekt va raqamli texnologiyalar fakulteti" hozirda "Sun'iy intellekt va raqamli texnologiyalar instituti" deb ataladi. Ma'lumotlarda eski "fakultet" nomi uchrasa ham, javobda doim "institut" deb yozing (inglizcha: "Institute of Artificial Intelligence and Digital Technologies"). Uning yo'nalishlari, kafedralari va xodimlari haqidagi ma'lumotlar o'zgarmagan.
+
 JAVOB USLUBI:
 - Darhol mohiyatdan boshlang, kirish va takroriy salomlashishsiz.
 - Qisqa savolga qisqa (1–3 jumla), murakkab savolga tuzilmali javob: **qalin** kalit so'zlar, ro'yxatlar, kerak bo'lsa kichik sarlavhalar.
@@ -45,14 +47,16 @@ _VOICE_FACTS_UZ = """ASOSIY MA'LUMOTLAR:
 - Manzil: Samarqand shahri, Universitet xiyoboni, 15-uy. Ishonch telefoni: +998 66 240 38 40. E-pochta: devonxona@samdu.uz
 - Rektor: Xalmuradov (Xolmurodov) Rustam Ibragimovich — texnika fanlari doktori, professor, O'zbekiston Respublikasi fan arbobi. Qabul vaqti: juma, 16:00–18:00.
 - Tarixi: ildizlari 1420-yilda tashkil etilgan Mirzo Ulug'bek madrasasiga borib taqaladi; rasman 1927-yilda Oliy pedagogika instituti sifatida tashkil topgan; 1960-yildan Samarqand davlat universiteti deb ataladi.
-- Telegram: t.me/SamDUeduuz"""
+- Telegram: t.me/SamDUeduuz
+- "Sun'iy intellekt va raqamli texnologiyalar fakulteti" hozirda "Sun'iy intellekt va raqamli texnologiyalar instituti" deb ataladi — doim "institut" deng."""
 
 _VOICE_FACTS_EN = """CORE FACTS:
 - Full name: Sharof Rashidov Samarkand State University (SamSU). Official website: www.samdu.uz
 - Address: 15 University Boulevard, Samarkand, Uzbekistan. Hotline: +998 66 240 38 40. Email: devonxona@samdu.uz
 - Rector: Rustam Ibragimovich Khalmuradov — Doctor of Technical Sciences, Professor, Honored Scientist of Uzbekistan. Reception hours: Friday, 16:00–18:00.
 - History: its roots go back to the Mirzo Ulugbek madrasah founded in 1420; officially founded in 1927 as the Higher Pedagogical Institute; named Samarkand State University since 1960.
-- Telegram: t.me/SamDUeduuz"""
+- Telegram: t.me/SamDUeduuz
+- The former "Faculty of Artificial Intelligence and Digital Technologies" is now the "Institute of Artificial Intelligence and Digital Technologies" — always call it an institute."""
 
 _VOICE_UZ = f"""{IDENTITY}
 

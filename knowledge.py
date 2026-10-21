@@ -23,6 +23,7 @@ from config import (
     MAX_CHUNKS_PER_SOURCE,
     MAX_CONTEXT_CHARS,
     MAX_VECTOR_DISTANCE,
+    SOURCE_TITLES,
     SOURCE_WEIGHTS,
     TOP_K,
     VECTOR_CANDIDATES,
@@ -147,7 +148,8 @@ class KnowledgeBase:
         return [
             {
                 "text": self.docs[idx],
-                "title": self.metas[idx].get("title", ""),
+                # Joriy nom config dan olinadi — nom o'zgarsa bazani qayta qurish shart emas
+                "title": SOURCE_TITLES.get(self.metas[idx].get("source", ""), self.metas[idx].get("title", "")),
                 "section": self.metas[idx].get("section", ""),
                 "url": self.metas[idx].get("url", ""),
                 "score": round(score, 5),

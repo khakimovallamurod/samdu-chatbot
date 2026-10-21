@@ -106,7 +106,7 @@ SOURCE_TITLES = {
     "samdu_ichki_tartib_rag_chatbot.txt": "SamDU ichki tartib-qoidalari",
     "Odob_axloq.txt": "SamDU odob-axloq kodeksi",
     "samdu_odob_axloq_rag_chatbot.txt": "SamDU odob-axloq kodeksi",
-    "itkt_samdu_rag_dataset.txt": "Sun'iy intellekt va raqamli texnologiyalar fakulteti",
+    "itkt_samdu_rag_dataset.txt": "Sun'iy intellekt va raqamli texnologiyalar instituti",
     "kredit_modul_tizimi_RAG.txt": "Kredit-modul tizimi (VM qarori, 824-son)",
     "oliy_talim_qabul_nizom_RAG.txt": "Oliy ta'limga qabul nizomi (VM qarori, 578-son)",
     "rag_data_samdu_clean.txt": "samdu.uz rasmiy sayti",
