@@ -13,6 +13,7 @@ Faqat SamDU haqidagi ma'lumotlar asosida javob beradi (`new-documents/` + www.sa
 | `rag.py` | Javob berish mantig'i: tezkor javoblar, kesh, generatsiya (oddiy va oqimli) |
 | `knowledge.py` | Gibrid qidiruv: vektor (ChromaDB) + kalit so'z (BM25), RRF |
 | `live.py` | Ovozli seans uchun bir martalik token |
+| `security.py` | API himoyasi: veb sessiya cookie si va mobil ilova kaliti |
 | `prompts.py` | Matnli va ovozli yordamchi ko'rsatmalari |
 | `ingest.py` | `new-documents/*.txt` → ChromaDB (bazani noldan quradi) |
 | `web_scraper.py` | samdu.uz va ai-lab.sampc.uz sahifalarini yig'ish |
@@ -62,7 +63,11 @@ location / {
 - Bazada mos ma'lumot bo'lmasa (begona mavzu) — model chaqirilmaydi.
 - Javoblar (30 daqiqa) va savol vektorlari (6 soat) xotirada keshlanadi.
 - Bir vaqtdagi generatsiyalar soni cheklangan (`MAX_CONCURRENT_GENERATIONS`), ortig'i navbatda kutadi.
-- IP bo'yicha limitlar; server suhbat tarixini saqlamaydi (stateless).
+- API ga faqat sahifa bergan imzolangan HttpOnly cookie (veb) yoki `X-API-Key` (mobil ilova) bilan
+  kirish mumkin — endpointni Network dan ko'chirib, skript bilan chaqirib bo'lmaydi.
+- Limitlar IP va sessiya bo'yicha (daqiqalik + kunlik) hamda butun server bo'yicha (ko'p IP dan hujumga qarshi).
+- Statik fayllar URL ida kontent xeshi (`?v=...`) bor va ular 1 yilga keshlanadi: F5 da qayta yuklanmaydi.
+- Server suhbat tarixini saqlamaydi (stateless).
 
 ## `.env` sozlamalari (ixtiyoriy)
 
@@ -72,12 +77,18 @@ location / {
 | `CHAT_THINKING_LEVEL_NUMERIC` | `low` | Formula va raqamli savollar uchun (aniqroq) |
 | `LIVE_VOICE` | `Kore` | Ovoz |
 | `MAX_VECTOR_DISTANCE` | `0.36` | Qidiruvda o'xshashlik chegarasi |
-| `RATE_LIMIT_CHAT` / `_SEARCH` / `_LIVE_TOKEN` | `20` / `60` / `6` | Daqiqasiga, har bir IP |
+| `RATE_LIMIT_CHAT` / `_SEARCH` / `_LIVE_TOKEN` | `10` / `40` / `3` | Daqiqasiga, har bir IP va sessiya |
+| `RATE_LIMIT_CHAT_DAILY` / `_SEARCH_DAILY` / `_LIVE_TOKEN_DAILY` | `150` / `1000` / `20` | Kuniga |
+| `GLOBAL_LIMIT_CHAT` / `GLOBAL_LIMIT_LIVE_TOKEN` | `300` / `30` | Butun server, daqiqasiga |
+| `REQUIRE_CLIENT_AUTH` | `true` | API uchun cookie yoki `X-API-Key` talab qilish |
+| `CLIENT_API_KEYS` | — | Mobil ilova kalitlari (vergul bilan) |
+| `SECRET_KEY` | `AI_API_KEY` dan | Sessiya cookie sini imzolash |
+| `SESSION_TTL` | `43200` | Sessiya muddati, soniya |
 | `MAX_CONCURRENT_GENERATIONS` | `16` | |
 | `ANSWER_CACHE_TTL` | `1800` | Soniya |
 | `TRUST_PROXY` | `false` | nginx ortida `true` |
 | `CORS_ORIGINS` | `*` | |
-| `ENABLE_API_DOCS` | `true` | `/api/docs` ni yopish uchun `false` |
+| `ENABLE_API_DOCS` | `false` | `/api/docs` ni ochish uchun `true` |
 | `PORT` | `8800` | `python flaskapp.py` uchun |
 
 Qo'shimcha: veb sahifaga `/?q=Savol+matni` havolasi bilan kirilsa, savol avtomatik yuboriladi.

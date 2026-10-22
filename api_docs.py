@@ -37,7 +37,7 @@ OPENAPI_SPEC = {
                 "summary": "Savolga to'liq javob olish",
                 "requestBody": {"required": True, "content": {"application/json": {
                     "schema": {"$ref": "#/components/schemas/ChatRequest"},
-                    "example": {"question": "SamDU rektori kim?", "history": []},
+                    "example": {"question": "SamDUda qanday fakultetlar bor?", "history": []},
                 }}},
                 "responses": {
                     "200": {"description": "Javob", "content": {"application/json": {
@@ -55,9 +55,9 @@ OPENAPI_SPEC = {
                 "summary": "Javobni oqim (Server-Sent Events) ko'rinishida olish",
                 "description": (
                     "Javob `text/event-stream` formatida bo'laklab keladi:\n\n"
-                    "```\nevent: delta\ndata: {\"text\": \"SamDU rektori \"}\n\n"
-                    "event: delta\ndata: {\"text\": \"— Xalmuradov Rustam Ibragimovich.\"}\n\n"
-                    "event: done\ndata: {\"sources\": [{\"title\": \"SamDU rektori\", \"url\": \"https://...\"}], "
+                    "```\nevent: delta\ndata: {\"text\": \"SamDUda \"}\n\n"
+                    "event: delta\ndata: {\"text\": \"qator fakultetlar mavjud.\"}\n\n"
+                    "event: done\ndata: {\"sources\": [{\"title\": \"SamDU fakultetlari\", \"url\": \"https://...\"}], "
                     "\"cached\": false, \"latency_ms\": 1430}\n```\n\n"
                     "Xato bo'lsa: `event: error` / `data: {\"code\": \"generation_failed\", \"message\": \"...\"}`.\n\n"
                     "Validatsiya va limit xatolari oqim boshlanmasdan oddiy JSON (400/429) bilan qaytadi."
@@ -80,7 +80,7 @@ OPENAPI_SPEC = {
                 "description": "Ovozli seansda `search_samdu` funksiya chaqiruviga javob berish uchun ishlatiladi. Tez ishlaydi (~0.3–0.7 s).",
                 "requestBody": {"required": True, "content": {"application/json": {
                     "schema": {"$ref": "#/components/schemas/SearchRequest"},
-                    "example": {"query": "SamDU rektori", "top_k": 5},
+                    "example": {"query": "SamDU fakultetlari", "top_k": 5},
                 }}},
                 "responses": {
                     "200": {"description": "Topilgan ma'lumotlar", "content": {"application/json": {

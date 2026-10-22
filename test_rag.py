@@ -5,7 +5,7 @@ import rag
 
 
 def main():
-    q = " ".join(sys.argv[1:]) or "SamDU rektori kim?"
+    q = " ".join(sys.argv[1:]) or "SamDUda qanday fakultetlar bor?"
     print(f"Savol: {q}\n")
     res = rag.answer(q)
     print(res["answer"])

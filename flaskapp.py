@@ -7,21 +7,24 @@ Ishga tushirish:
 import logging
 import threading
 
-from flask import Flask, abort, jsonify, render_template, request
+import hashlib
+
+from flask import Flask, abort, jsonify, make_response, render_template, request
 from werkzeug.exceptions import HTTPException
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 import rag
 from api import SUGGESTIONS, api, rate_limited
 from api_docs import OPENAPI_SPEC
-from config import CORS_ORIGINS, ENABLE_API_DOCS, PORT, RATE_LIMIT_CHAT, TRUST_PROXY
+from config import CORS_ORIGINS, ENABLE_API_DOCS, PORT, TRUST_PROXY
 from knowledge import get_kb
+from security import issue_session
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 
 app = Flask(__name__)
 app.json.ensure_ascii = False
-app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 3600  # statik fayllar brauzerda keshlanadi
+app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 365 * 86400  # URL da kontent xeshi bor, shuning uchun uzoq keshlash xavfsiz
 if TRUST_PROXY:
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
@@ -40,6 +43,25 @@ def _warmup():
 threading.Thread(target=_warmup, daemon=True).start()
 
 
+_static_hashes: dict[str, str] = {}
+
+
+@app.url_defaults
+def static_version(endpoint, values):
+    """Statik fayl URL iga kontent xeshi qo'shiladi (?v=...): fayl o'zgarmaguncha brauzer
+    uni qayta so'ramaydi (F5 da ham keshdan oladi), o'zgarsa yangi URL bilan darhol yangilanadi."""
+    if endpoint != "static" or "filename" not in values:
+        return
+    name = values["filename"]
+    if name not in _static_hashes:
+        try:
+            with open(f"{app.static_folder}/{name}", "rb") as f:
+                _static_hashes[name] = hashlib.md5(f.read()).hexdigest()[:10]
+        except OSError:
+            return
+    values["v"] = _static_hashes[name]
+
+
 @app.after_request
 def add_headers(resp):
     if request.path.startswith("/api/"):
@@ -47,6 +69,8 @@ def add_headers(resp):
         resp.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         resp.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
         resp.headers["Access-Control-Max-Age"] = "86400"
+    if request.endpoint == "static" and request.args.get("v"):
+        resp.headers["Cache-Control"] = "public, max-age=31536000, immutable"
     resp.headers.setdefault("X-Content-Type-Options", "nosniff")
     return resp
 
@@ -89,7 +113,9 @@ WEB_SUGGESTIONS = [{**s, "icon": _ICON.format(_ICON_PATHS.get(s["key"], _ICON_PA
 
 @app.get("/")
 def home():
-    return render_template("index.html", suggestions=WEB_SUGGESTIONS)
+    resp = make_response(render_template("index.html", suggestions=WEB_SUGGESTIONS))
+    resp.headers["Cache-Control"] = "no-store"  # sahifa har safar yangi sessiya cookie si bilan beriladi
+    return issue_session(resp)
 
 
 @app.get("/api/openapi.json")
@@ -109,7 +135,7 @@ def api_docs():
 @app.post("/ask")
 def ask_legacy():
     """Eski mijozlar uchun moslik: {"question": "..."} → {"status", "answer", "sources"}."""
-    if (limited := rate_limited("chat", RATE_LIMIT_CHAT)) is not None:
+    if (limited := rate_limited("chat")) is not None:
         return limited
     payload = request.get_json(silent=True) or {}
     try:

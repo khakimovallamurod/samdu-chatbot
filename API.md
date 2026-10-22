@@ -1,10 +1,13 @@
 # SamDU AI Yordamchi — API hujjati (v1)
 
 Interaktiv hujjat (Swagger): **`/api/docs`** · OpenAPI spetsifikatsiyasi: **`/api/openapi.json`**
+(standart holatda yopiq — ochish uchun `.env` ga `ENABLE_API_DOCS=true`)
 
 - Base URL: `https://<server>/api/v1`
 - Format: JSON (UTF-8), `Content-Type: application/json`
-- Autentifikatsiya: talab qilinmaydi (IP bo'yicha limitlar qo'llanadi)
+- Autentifikatsiya: mobil ilova har bir so'rovda `X-API-Key: <kalit>` sarlavhasini yuboradi
+  (kalitlar serverdagi `.env` → `CLIENT_API_KEYS`). Veb sahifa esa avtomatik beriladigan
+  sessiya cookie si bilan ishlaydi. `/chat`, `/chat/stream`, `/search`, `/live/token` uchun majburiy.
 - CORS: yoqilgan (`CORS_ORIGINS` orqali sozlanadi)
 
 | Endpoint | Metod | Vazifasi |
@@ -24,7 +27,7 @@ Interaktiv hujjat (Swagger): **`/api/docs`** · OpenAPI spetsifikatsiyasi: **`/a
 
 ```json
 {
-  "question": "SamDU rektori kim?",
+  "question": "SamDUda qanday fakultetlar bor?",
   "history": [
     {"role": "user", "content": "Salom"},
     {"role": "assistant", "content": "Assalomu alaykum! ..."}
@@ -44,8 +47,8 @@ Javob `200`:
 ```json
 {
   "status": "success",
-  "answer": "SamDU rektori — **Xalmuradov Rustam Ibragimovich** ...",
-  "sources": [{"title": "SamDU rektori", "url": "https://www.samdu.uz/uz/pages/u_rektori"}],
+  "answer": "SamDUda **20 dan ortiq** fakultet va institut mavjud ...",
+  "sources": [{"title": "SamDU fakultetlari", "url": "https://www.samdu.uz/uz"}],
   "cached": false,
   "latency_ms": 1480
 }
@@ -66,13 +69,13 @@ So'rov tanasi `/chat` bilan bir xil. Javob `text/event-stream`:
 
 ```
 event: delta
-data: {"text": "SamDU rektori "}
+data: {"text": "SamDUda "}
 
 event: delta
-data: {"text": "— **Xalmuradov Rustam Ibragimovich**."}
+data: {"text": "qator fakultetlar mavjud."}
 
 event: done
-data: {"sources": [{"title": "SamDU rektori", "url": "..."}], "cached": false, "latency_ms": 1430}
+data: {"sources": [{"title": "SamDU fakultetlari", "url": "..."}], "cached": false, "latency_ms": 1430}
 ```
 
 - `delta` matnlarini ketma-ket qo'shib boring.
@@ -182,15 +185,15 @@ Matn bilan yozish ham mumkin: `{"realtimeInput": {"text": "SamDU qayerda joylash
 **4) Funksiya chaqiruvi (`search_samdu`).** Kelgan xabar:
 
 ```json
-{"toolCall": {"functionCalls": [{"id": "call_123", "name": "search_samdu", "args": {"query": "SamDU rektori"}}]}}
+{"toolCall": {"functionCalls": [{"id": "call_123", "name": "search_samdu", "args": {"query": "SamDU fakultetlari"}}]}}
 ```
 
 Ilova serverdan qidiradi:
 
 ```bash
 POST /api/v1/search
-{"query": "SamDU rektori", "top_k": 5}
-→ {"status": "success", "found": true, "context": "[1] SamDU rektori | ...", "sources": [...]}
+{"query": "SamDU fakultetlari", "top_k": 5}
+→ {"status": "success", "found": true, "context": "[1] SamDU fakultetlari | ...", "sources": [...]}
 ```
 
 va natijani seansga qaytaradi (`id` va `name` aynan bo'lsin):
@@ -222,6 +225,7 @@ Barcha xatolar bir xil formatda:
 
 | HTTP | `code` | Sabab |
 |---|---|---|
+| 401 | `unauthorized` | `X-API-Key` yo'q/noto'g'ri yoki veb sessiya muddati tugagan |
 | 400 | `empty_question`, `question_too_long`, `empty_query`, `invalid_request` | Noto'g'ri so'rov |
 | 404 | `not_found` | Endpoint topilmadi |
 | 429 | `rate_limited` | Limit oshdi (`Retry-After` sarlavhasida soniyalar) |
@@ -231,10 +235,10 @@ Barcha xatolar bir xil formatda:
 
 `message` maydoni foydalanuvchiga ko'rsatish uchun tayyor matn.
 
-## 4. Limitlar (har bir IP uchun, daqiqasiga)
+## 4. Limitlar (har bir IP va har bir veb sessiya uchun)
 
-| Endpoint | Limit | `.env` o'zgaruvchisi |
-|---|---|---|
-| `/chat`, `/chat/stream` | 20 | `RATE_LIMIT_CHAT` |
-| `/search` | 60 | `RATE_LIMIT_SEARCH` |
-| `/live/token` | 6 | `RATE_LIMIT_LIVE_TOKEN` |
+| Endpoint | Daqiqasiga | Kuniga | Butun server, daqiqasiga | `.env` o'zgaruvchilari |
+|---|---|---|---|---|
+| `/chat`, `/chat/stream` | 10 | 150 | 300 | `RATE_LIMIT_CHAT`, `RATE_LIMIT_CHAT_DAILY`, `GLOBAL_LIMIT_CHAT` |
+| `/search` | 40 | 1000 | — | `RATE_LIMIT_SEARCH`, `RATE_LIMIT_SEARCH_DAILY` |
+| `/live/token` | 3 | 20 | 30 | `RATE_LIMIT_LIVE_TOKEN`, `RATE_LIMIT_LIVE_TOKEN_DAILY`, `GLOBAL_LIMIT_LIVE_TOKEN` |

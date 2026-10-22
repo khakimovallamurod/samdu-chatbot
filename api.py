@@ -6,9 +6,20 @@ import time
 from flask import Blueprint, Response, jsonify, request, stream_with_context
 
 import rag
-from config import RATE_LIMIT_CHAT, RATE_LIMIT_LIVE_TOKEN, RATE_LIMIT_SEARCH
+from config import (
+    GLOBAL_LIMIT_CHAT,
+    GLOBAL_LIMIT_LIVE_TOKEN,
+    RATE_LIMIT_CHAT,
+    RATE_LIMIT_CHAT_DAILY,
+    RATE_LIMIT_LIVE_TOKEN,
+    RATE_LIMIT_LIVE_TOKEN_DAILY,
+    RATE_LIMIT_SEARCH,
+    RATE_LIMIT_SEARCH_DAILY,
+    REQUIRE_CLIENT_AUTH,
+)
 from knowledge import get_kb
 from live import create_live_token
+from security import client_identity
 from utils import RateLimiter
 
 log = logging.getLogger(__name__)
@@ -23,9 +34,6 @@ SUGGESTIONS = [
     {"key": "faculties", "title": {"uz": "Fakultetlar", "en": "Faculties"},
      "question": {"uz": "SamDUda qanday fakultet va institutlar bor?",
                   "en": "Which faculties and institutes does SamSU have?"}},
-    {"key": "rector", "title": {"uz": "Rektor", "en": "Rector"},
-     "question": {"uz": "SamDU rektori kim va qabul vaqti qachon?",
-                  "en": "Who is the rector of SamSU and what are the reception hours?"}},
     {"key": "grading", "title": {"uz": "Baholash", "en": "Grading"},
      "question": {"uz": "Talabalar bilimi qanday baholanadi?",
                   "en": "How are students' knowledge and performance graded?"}},
@@ -65,8 +73,28 @@ def error(code: str, message: str, status: int, **extra):
     return resp
 
 
-def rate_limited(bucket: str, rule: tuple[int, int]):
-    ok, retry_after = limiter.hit(f"{bucket}:{request.remote_addr}", *rule)
+# bucket → (daqiqalik, kunlik, butun server bo'yicha) limitlar
+LIMITS = {
+    "chat": (RATE_LIMIT_CHAT, RATE_LIMIT_CHAT_DAILY, GLOBAL_LIMIT_CHAT),
+    "search": (RATE_LIMIT_SEARCH, RATE_LIMIT_SEARCH_DAILY, None),
+    "live": (RATE_LIMIT_LIVE_TOKEN, RATE_LIMIT_LIVE_TOKEN_DAILY, GLOBAL_LIMIT_LIVE_TOKEN),
+}
+
+
+def rate_limited(bucket: str):
+    """Ruxsat va limitlarni tekshiradi; muammo bo'lsa xato javobini qaytaradi, aks holda None."""
+    identity = client_identity()
+    if REQUIRE_CLIENT_AUTH and identity is None:
+        return error("unauthorized", "Sessiya muddati tugagan. Iltimos, sahifani yangilang.", 401)
+    per_minute, daily, global_rule = LIMITS[bucket]
+    ip = request.remote_addr
+    rules = [(f"{bucket}:ip:{ip}", *per_minute), (f"{bucket}:ip:{ip}:day", *daily)]
+    # Veb sessiya IP dan qat'i nazar alohida cheklanadi (mobil ilova kaliti esa barcha foydalanuvchilarga umumiy)
+    if identity and identity.startswith("web:"):
+        rules += [(f"{bucket}:{identity}", *per_minute), (f"{bucket}:{identity}:day", *daily)]
+    if global_rule:
+        rules.append((f"{bucket}:global", *global_rule))
+    ok, retry_after = limiter.hit_all(rules)
     if ok:
         return None
     return error("rate_limited", f"So'rovlar soni oshib ketdi. {retry_after} soniyadan so'ng qayta urinib ko'ring.",
@@ -91,7 +119,7 @@ def suggestions():
 
 @api.post("/chat")
 def chat():
-    if (limited := rate_limited("chat", RATE_LIMIT_CHAT)) is not None:
+    if (limited := rate_limited("chat")) is not None:
         return limited
     body = json_body()
     try:
@@ -103,7 +131,7 @@ def chat():
 
 @api.post("/chat/stream")
 def chat_stream():
-    if (limited := rate_limited("chat", RATE_LIMIT_CHAT)) is not None:
+    if (limited := rate_limited("chat")) is not None:
         return limited
     body = json_body()
     try:
@@ -125,7 +153,7 @@ def chat_stream():
 
 @api.post("/search")
 def search():
-    if (limited := rate_limited("search", RATE_LIMIT_SEARCH)) is not None:
+    if (limited := rate_limited("search")) is not None:
         return limited
     body = json_body()
     try:
@@ -139,7 +167,7 @@ def search():
 
 @api.post("/live/token")
 def live_token():
-    if (limited := rate_limited("live", RATE_LIMIT_LIVE_TOKEN)) is not None:
+    if (limited := rate_limited("live")) is not None:
         return limited
     try:
         return jsonify({"status": "success", **create_live_token(request_lang(json_body()) or "uz")})

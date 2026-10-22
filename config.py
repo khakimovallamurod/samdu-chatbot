@@ -67,9 +67,22 @@ EMBED_CACHE_SIZE = 3000
 # Yuklamani cheklash
 MAX_CONCURRENT_GENERATIONS = _env("MAX_CONCURRENT_GENERATIONS", 16)
 GENERATION_QUEUE_TIMEOUT = 15   # soniya: navbat to'la bo'lsa shuncha kutiladi
-RATE_LIMIT_CHAT = (_env("RATE_LIMIT_CHAT", 20), 60)        # (so'rov, soniya) har bir IP uchun
-RATE_LIMIT_SEARCH = (_env("RATE_LIMIT_SEARCH", 60), 60)
-RATE_LIMIT_LIVE_TOKEN = (_env("RATE_LIMIT_LIVE_TOKEN", 6), 60)
+# (so'rov, soniya) — har bir IP va har bir sessiya/ilova kaliti uchun alohida hisoblanadi
+RATE_LIMIT_CHAT = (_env("RATE_LIMIT_CHAT", 10), 60)
+RATE_LIMIT_CHAT_DAILY = (_env("RATE_LIMIT_CHAT_DAILY", 150), 86400)
+RATE_LIMIT_SEARCH = (_env("RATE_LIMIT_SEARCH", 40), 60)
+RATE_LIMIT_SEARCH_DAILY = (_env("RATE_LIMIT_SEARCH_DAILY", 1000), 86400)
+RATE_LIMIT_LIVE_TOKEN = (_env("RATE_LIMIT_LIVE_TOKEN", 3), 60)
+RATE_LIMIT_LIVE_TOKEN_DAILY = (_env("RATE_LIMIT_LIVE_TOKEN_DAILY", 20), 86400)
+# Butun server bo'yicha (ko'p IP dan hujum bo'lsa ham token sarfi shu chegaradan oshmaydi)
+GLOBAL_LIMIT_CHAT = (_env("GLOBAL_LIMIT_CHAT", 300), 60)
+GLOBAL_LIMIT_LIVE_TOKEN = (_env("GLOBAL_LIMIT_LIVE_TOKEN", 30), 60)
+
+# API ga kirish: veb sahifa cookie si yoki mobil ilova kaliti (X-API-Key)
+REQUIRE_CLIENT_AUTH = _env("REQUIRE_CLIENT_AUTH", True)
+CLIENT_API_KEYS = _env("CLIENT_API_KEYS", "")   # vergul bilan ajratilgan, mobil ilovalar uchun
+SECRET_KEY = _env("SECRET_KEY", "")             # bo'sh bo'lsa AI_API_KEY dan hosil qilinadi
+SESSION_TTL = _env("SESSION_TTL", 12 * 3600)    # soniya
 
 # Ovozli seans (vaqtinchalik token)
 LIVE_TOKEN_TTL_MINUTES = 30        # seans davomida token amal qilish muddati
@@ -78,7 +91,7 @@ LIVE_SESSION_START_MINUTES = 2     # token olingach seansni boshlash uchun vaqt
 # Server
 TRUST_PROXY = _env("TRUST_PROXY", False)   # nginx ortida ishlasa true qiling
 CORS_ORIGINS = _env("CORS_ORIGINS", "*")
-ENABLE_API_DOCS = _env("ENABLE_API_DOCS", True)
+ENABLE_API_DOCS = _env("ENABLE_API_DOCS", False)
 PORT = _env("PORT", 8800)
 
 # Tuzilgan (qo'lda tayyorlangan) hujjatlarga qidiruvda ozgina ustunlik beriladi;

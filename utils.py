@@ -60,6 +60,7 @@ class RateLimiter:
 
     def __init__(self):
         self._hits: dict[str, deque] = {}
+        self._windows: dict[str, int] = {}
         self._lock = threading.Lock()
         self._last_cleanup = time.monotonic()
 
@@ -70,6 +71,7 @@ class RateLimiter:
             if now - self._last_cleanup > 300:
                 self._cleanup(now)
             q = self._hits.setdefault(key, deque())
+            self._windows[key] = window
             while q and q[0] <= now - window:
                 q.popleft()
             if len(q) >= limit:
@@ -77,10 +79,29 @@ class RateLimiter:
             q.append(now)
             return True, 0
 
+    def hit_all(self, rules: list[tuple[str, int, int]]) -> tuple[bool, int]:
+        """Bir nechta limitni birga tekshiradi: biri oshsa so'rov hisoblanmaydi."""
+        now = time.monotonic()
+        with self._lock:
+            worst = 0
+            for key, limit, window in rules:
+                q = self._hits.get(key)
+                while q and q[0] <= now - window:
+                    q.popleft()
+                if q and len(q) >= limit:
+                    worst = max(worst, max(1, int(q[0] + window - now) + 1))
+            if worst:
+                return False, worst
+            for key, _, window in rules:
+                self._hits.setdefault(key, deque()).append(now)
+                self._windows[key] = max(window, self._windows.get(key, 0))
+            return True, 0
+
     def _cleanup(self, now: float):
         self._last_cleanup = now
-        for key in [k for k, q in self._hits.items() if not q or q[-1] < now - 3600]:
+        for key in [k for k, q in self._hits.items() if not q or q[-1] < now - self._windows.get(k, 3600)]:
             del self._hits[key]
+            self._windows.pop(key, None)
 
 
 # --- Matn normalizatsiyasi -------------------------------------------------
