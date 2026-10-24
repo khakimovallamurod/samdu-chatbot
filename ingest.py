@@ -1,10 +1,12 @@
-"""new-documents/*.txt fayllaridan vektor bazani (ChromaDB) noldan qayta quradi.
+"""new-documents/*.txt fayllaridan vektor baza (ChromaDB) yaratish.
 
 Ishlatish:
-    python ingest.py
+    python ingest.py                 # bazani noldan to'liq qayta qurish (barcha fayllar)
+    python ingest.py --add           # faqat bazada hali yo'q YANGI fayllarni qo'shish (tejamkor)
+    python ingest.py --add fayl.txt  # ko'rsatilgan fayl(lar)ni qayta indekslash (o'zgartirilgan bo'lsa)
+    python ingest.py --dry-run       # API chaqirmasdan bo'laklashni ko'rish
 
-Eslatma: baza to'liq o'chirib qayta yaratiladi. Ishlab turgan serverni ingestdan
-keyin qayta ishga tushiring.
+Ingestdan keyin ishlab turgan serverni qayta ishga tushiring.
 """
 import hashlib
 import re
@@ -31,7 +33,11 @@ from utils import get_client
 
 _SEPARATOR_LINE = re.compile(r"^\s*[=\-_*#~]{3,}\s*$")
 _MD_HEADING = re.compile(r"^\s*#{1,6}\s+(.+?)\s*#*\s*$")
-_URL_LINE = re.compile(r"^\s*(?:URL|=== MANBA):\s*(https?://\S+?)\s*(?:===)?\s*$", re.IGNORECASE)
+_URL_LINE = re.compile(r"^\s*(?:URL|MANBA|=== MANBA):\s*(https?://\S+?)\s*(?:===)?\s*$", re.IGNORECASE)
+# Huquqiy hujjatlar tuzilishi: "3-bob. ...", "12-modda. ...", "...qaroriga 1-ILOVA"
+_BOB_LINE = re.compile(r"^\d+-bob\.\s*\S.*$", re.IGNORECASE)
+_MODDA_LINE = re.compile(r"^\d+-modda\.\s*\S.*$", re.IGNORECASE)
+_ANNEX_LINE = re.compile(r"\b\d+-ILOVA\s*$")
 _SENTENCE_END = re.compile(r"(?<=[.!?;])\s+")
 
 
@@ -94,6 +100,9 @@ def chunk_document(fname: str, raw_text: str) -> list[dict]:
     title = _doc_title(fname, [l for l in lines if l])
     doc_url = ""
     section = ""
+    part = ""   # ilova / nizom nomi
+    bob = ""    # joriy bob
+    expect_part_title = False  # "N-ILOVA" dan keyingi katta harfli qator — ilova nomi
     chunks: list[dict] = []
     buffer: list[str] = []
 
@@ -112,13 +121,38 @@ def chunk_document(fname: str, raw_text: str) -> list[dict]:
             continue
         url_match = _URL_LINE.match(line)
         if url_match:
+            if chunks or doc_url:  # yangi sahifa (saytdan yig'ilgan fayllar) — oldingi qismni yopamiz
+                flush()
+            doc_url = url_match.group(1)  # hujjat boshidagi MANBA birinchi bo'lakka ham tegishli
+            continue
+        if len(line) < 200 and _ANNEX_LINE.search(line):
             flush()
-            doc_url = url_match.group(1)
+            part, bob = line[:120], ""
+            section = part
+            expect_part_title = True
+            continue
+        if expect_part_title:
+            expect_part_title = False
+            if line.isupper() and len(line) < 400:
+                flush()
+                part, bob = line[:110], ""
+                section = part
+                continue
+        if len(line) < 200 and _BOB_LINE.match(line):
+            flush()
+            bob = line[:120]
+            section = f"{part[:60]} — {bob}" if part else bob
+            continue
+        if len(line) < 250 and _MODDA_LINE.match(line):
+            flush()
+            section = f"{bob} — {line[:120]}" if bob else line[:120]
             continue
         heading = _MD_HEADING.match(line)
-        if heading or _is_caps_heading(line):
+        if heading or (_is_caps_heading(line) and len(line) <= 90) or (line.isupper() and line.endswith("NIZOM")):
             flush()
             section = (heading.group(1) if heading else line).strip("*:= ")[:120]
+            if line.isupper() and line.endswith("NIZOM"):
+                part, bob = section, ""
             continue
 
         # Saytdan yig'ilgan sahifalar: bitta qator = bitta sahifa, boshida "Sarlavha . matn"
@@ -175,7 +209,7 @@ def ingest() -> None:
         chunks = chunk_document(path.name, text)
         unique = 0
         for c in chunks:
-            key = hashlib.sha1(re.sub(r"\W+", "", c["text"].split("\n", 1)[-1].lower()).encode()).hexdigest()
+            key = _body_hash(c["text"])
             if key in seen:
                 continue
             seen.add(key)
@@ -212,13 +246,82 @@ def ingest() -> None:
     print(f"\n🎉 Tayyor: {collection.count()} bo'lak {time.time() - started:.1f}s da saqlandi → {CHROMA_PATH}")
 
 
+def _body_hash(text: str) -> str:
+    return hashlib.sha1(re.sub(r"\W+", "", text.split("\n", 1)[-1].lower()).encode()).hexdigest()
+
+
+def ingest_add(names: list[str]) -> None:
+    """Bazani o'chirmasdan faqat yangi (yoki ko'rsatilgan) fayllarni qo'shadi.
+
+    Embedding faqat shu fayllar uchun hisoblanadi — butun bazani qayta qurishga qaraganda ancha tejamkor.
+    """
+    client = chromadb.PersistentClient(path=CHROMA_PATH)
+    collection = client.get_or_create_collection(name=COLLECTION_NAME, metadata={"hnsw:space": "cosine"})
+    existing = collection.get(include=["metadatas", "documents"])
+    indexed = {m.get("source") for m in existing["metadatas"]}
+
+    if names:
+        paths = [DOCS_DIR / n for n in names]
+        missing = [str(p) for p in paths if not p.is_file()]
+        if missing:
+            print(f"❌ Topilmadi: {', '.join(missing)}")
+            return
+    else:
+        paths = sorted(p for p in DOCS_DIR.glob("*.txt") if p.name not in indexed)
+    if not paths:
+        print("✅ Yangi fayl yo'q — baza dolzarb.")
+        return
+
+    # Qayta indekslanadigan fayllarning eski bo'laklarini o'chiramiz
+    for p in paths:
+        if p.name in indexed:
+            collection.delete(where={"source": p.name})
+            print(f"🗑️  {p.name}: eski bo'laklar o'chirildi")
+
+    # Boshqa fayllardagi bir xil matnlar takrorlanmasin
+    current = collection.get(include=["documents"])
+    seen = {_body_hash(d) for d in current["documents"]}
+    new_chunks = []
+    for p in paths:
+        chunks = chunk_document(p.name, p.read_text(encoding="utf-8", errors="ignore"))
+        unique = 0
+        for c in chunks:
+            key = _body_hash(c["text"])
+            if key in seen:
+                continue
+            seen.add(key)
+            c["id"] = f"{p.stem}__{unique}"
+            c["chunk_index"] = unique
+            new_chunks.append(c)
+            unique += 1
+        print(f"📘 {p.name}: {len(chunks)} bo'lak ({unique} noyob)")
+
+    started = time.time()
+    for i in range(0, len(new_chunks), EMBED_BATCH_SIZE):
+        batch = new_chunks[i:i + EMBED_BATCH_SIZE]
+        embeddings = embed_documents([c["text"] for c in batch])
+        collection.add(
+            ids=[c["id"] for c in batch],
+            documents=[c["text"] for c in batch],
+            embeddings=embeddings,
+            metadatas=[{"source": c["source"], "title": c["title"], "section": c["section"],
+                        "url": c["url"], "chunk_index": c["chunk_index"]} for c in batch],
+        )
+        print(f"   ✅ {min(i + EMBED_BATCH_SIZE, len(new_chunks))}/{len(new_chunks)}")
+    print(f"\n🎉 Qo'shildi: {len(new_chunks)} bo'lak ({time.time() - started:.1f}s). Bazada jami: {collection.count()}")
+
+
 if __name__ == "__main__":
-    if "--dry-run" in sys.argv:
-        for p in sorted(DOCS_DIR.glob("*.txt")):
+    args = sys.argv[1:]
+    if "--dry-run" in args:
+        names = [a for a in args if not a.startswith("--")]
+        for p in ([DOCS_DIR / n for n in names] if names else sorted(DOCS_DIR.glob("*.txt"))):
             cs = chunk_document(p.name, p.read_text(encoding="utf-8", errors="ignore"))
             sizes = [len(c["text"]) for c in cs] or [0]
             print(f"{p.name}: {len(cs)} bo'lak, o'rtacha {sum(sizes) // len(sizes)}, max {max(sizes)}")
             if cs:
                 print("   ", cs[min(3, len(cs) - 1)]["text"][:220].replace("\n", " ⏎ "))
+    elif "--add" in args:
+        ingest_add([a for a in args if not a.startswith("--")])
     else:
         ingest()

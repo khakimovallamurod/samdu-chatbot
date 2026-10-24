@@ -110,6 +110,10 @@ SOURCE_WEIGHTS = {
     "oliy_talim_qabul_nizom_RAG.txt": 1.2,
     "tyutorlik_rag_chatbot.txt": 1.2,
     "vm_qaror_578_qabul_toliq.txt": 1.2,
+    "01_Talim_togrisida_Qonun_ORQ-637_2020.txt": 1.1,
+    "02_VMQ-824_2020_Kredit-modul_tizimi.txt": 1.2,
+    "03_VMQ-59_2020_Stipendiyalar (1).txt": 1.2,
+    "04_VMQ-376_2023_Talabalar_turar_joyi.txt": 1.2,
 }
 
 # Manbalarning foydalanuvchiga ko'rinadigan nomlari (fayl nomlari hech qachon ko'rsatilmaydi)
@@ -133,5 +137,9 @@ SOURCE_TITLES = {
     "tyutorlik_rag_chatbot.txt": "Tyutorlik faoliyati (VM qarori, 656-son)",
     "vm_qaror_578_qabul_toliq.txt": "Qabul, o'qishni ko'chirish va akademik mobillik (VM qarori, 578-son)",
     "web_ai_lab_sampc_uz.txt": "SamDU Sun'iy intellekt laboratoriyasi",
+    "01_Talim_togrisida_Qonun_ORQ-637_2020.txt": "\"Ta'lim to'g'risida\"gi Qonun (O'RQ-637)",
+    "02_VMQ-824_2020_Kredit-modul_tizimi.txt": "Kredit-modul tizimi to'g'risida nizom (VM qarori, 824-son, to'liq matn)",
+    "03_VMQ-59_2020_Stipendiyalar (1).txt": "Stipendiyalar tayinlash va to'lash tartibi (VM qarori, 59-son)",
+    "04_VMQ-376_2023_Talabalar_turar_joyi.txt": "Talabalarni turar joy bilan ta'minlash (VM qarori, 376-son)",
     "web_www_samdu_uz.txt": "samdu.uz rasmiy sayti",
 }
